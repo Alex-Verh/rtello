@@ -1,0 +1,21 @@
+// Variables
+$background-1: #272727;
+$background-2: #303030;
+$color-1: #8A7DDA;
+
+
+.navigation {
+    background-color: $background-1;
+    padding: 8px 50px;
+
+    &__btn {
+
+    }
+}
+
+.button {
+    background-color: $color-1;
+    border-radius: 5px;
+    padding: 4px 15px;
+    cursor: pointer;
+}

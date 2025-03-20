@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "app/assets/builds",
+    "rootDir": "app/javascript"
+  },
+  "include": ["app/javascript/**/*"],
+  "exclude": ["node_modules", "vendor"]
+}
