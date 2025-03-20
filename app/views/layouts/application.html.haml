@@ -1,30 +1,37 @@
-!!! 5
 %html
   %head
     %meta{ charset: "utf-8" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
-    %title My Rails App
+    %title Rtello
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload"
-    = stylesheet_link_tag "tailwind", media: "all", "data-turbolinks-track": "reload"
-    = javascript_include_tag "application", type: "module", "data-turbolinks-track": "reload"
-  %body
-    %nav.navigation.text-white
-      %div.logo.font-bold Rtello
-      %div.flex.items-center.space-x-4
-        %div.relative
-          %button.text-white Dasboards
-          = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon")
-        %div.relative
-          %button.text-white Recent
-          %span.text-xs.ml-1 ▾
-        %div.relative
-          %button.text-white Templates
-          %span.text-xs.ml-1 ▾
-        %button.button.text-white Create
-      %div.relative
-        %button.bg-gray-700.text-white.px-3.py-1.rounded-full Account ▾
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" # scss
+    = stylesheet_link_tag "tailwind", media: "all", "data-turbolinks-track": "reload" # tailwind
+    = yield :stylesheets # inject page specific stylesheet
+    = javascript_include_tag "application", type: "module", "data-turbolinks-track": "reload" # typescript
 
-    %main
+  %body
+    %nav.navigation.text-white.flex.items-center
+      %div.navigation__logo.font-bold.cursor-pointer Rtello
+
+      %div.navigation__btn.flex.items-center
+        %button.cursor-pointer Dasboards
+        = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+
+      %div.navigation__btn.flex.items-center
+        %button.cursor-pointer Recent
+        = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+
+      %div.navigation__btn.flex.items-center
+        %button.cursor-pointer Templates
+        = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+        
+      %button.button.text-white.cursor-pointer Create
+
+      %div.navigation__account.flex.items-center
+        %div.navigation__account_avatar.flex.items-center.justify-center.cursor-pointer AV
+        %button.cursor-pointer Account
+        = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+
+    %main.main
       = yield
