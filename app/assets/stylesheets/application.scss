@@ -1,49 +1,45 @@
-// Variables
-$background-1: #272727;
-$background-2: #303030;
-$color-1: #8A7DDA;
-
+@use "./variables.scss";
 
 // Navigation Bar
 .navigation {
-    background-color: $background-1;
-    padding: 8px 50px;
+  background-color: variables.$background-1;
+  padding: 8px 50px;
 
-    &__logo {
-        margin-inline-end: 90px;
+  &__logo {
+    margin-inline-end: 90px;
+  }
+
+  &__btn {
+    margin-inline-end: 40px;
+
+    &_icon {
+      margin-inline-start: 7px;
     }
+  }
 
-    &__btn {
-        margin-inline-end: 40px;
+  &__account {
+    margin-inline: auto 0;
 
-        &_icon {
-            margin-inline-start: 7px;
-        }
+    &_avatar {
+      font-size: 12px;
+      background-color: variables.$color-1;
+      border-radius: 50%;
+      margin-inline-end: 10px;
+
+      width: 25px;
+      height: 25px;
+      aspect-ratio: 1;
     }
-
-    &__account {
-        margin-inline: auto 0;
-
-        &_avatar {
-            font-size: 12px;
-            background-color: $color-1;
-            border-radius: 50%;
-            margin-inline-end: 10px;
-
-            width: 25px;
-            height: 25px;
-            aspect-ratio: 1;
-        }
-    }
+  }
 }
 
 body {
-    background-color: $background-2;
+  background-color: variables.$background-2;
 }
 
 // Button
 .button {
-    background-color: $color-1;
-    border-radius: 5px;
-    padding: 4px 15px;
+  background-color: variables.$color-1;
+  border-radius: 5px;
+  padding: 4px 15px;
 }

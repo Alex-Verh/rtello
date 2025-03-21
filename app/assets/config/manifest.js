@@ -14,3 +14,6 @@
 
 // Images
 //= link arrow.svg
+//= link dashboards.svg
+//= link templates.svg
+//= link clock.svg
