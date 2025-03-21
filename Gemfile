@@ -49,6 +49,9 @@ gem "haml"
 # SCSS
 gem "sassc-rails"
 
+# Authentication with pre-built controllers, views, and routes for common authentication features like login, registration, password reset
+gem "devise"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 

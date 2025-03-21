@@ -10,7 +10,7 @@
     = yield :stylesheets # inject page specific stylesheet
     = javascript_include_tag "application", type: "module", "data-turbolinks-track": "reload" # typescript
 
-  %body
+  %body.h-screen
     %nav.navigation.text-white.flex.items-center
       %div.navigation__logo.font-bold.cursor-pointer Rtello
 

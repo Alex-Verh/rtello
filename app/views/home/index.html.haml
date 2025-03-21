@@ -2,9 +2,9 @@
 - content_for :stylesheets do
   = stylesheet_link_tag 'pages/home'
 
-%div.container.mx-auto.text-white.home.flex.flex-col.md:flex-row.gap-4
+%div.home.container.mx-auto.text-white.flex.flex-col.md:flex-row.gap-4
   -# Home sidebar containing the links to dashboards/templates and related workspaces
-  %div.home-sidebar.w-full{ class: "md:w-1/4 lg:w-1/6" }
+  %aside.home-sidebar.w-full{ class: "md:w-1/4 lg:w-1/6" }
     %div.home-sidebar__btn.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-sidebar__btn__icon cursor-pointer")
       %button.cursor-pointer Dashboards
@@ -26,39 +26,29 @@
       %button.cursor-pointer Dashboard Name 1
 
 
-  %div.home-main.w-full{ class: "md:w-3/4 lg:w-5/6" }
+  %section.home-main.w-full{ class: "md:w-3/4 lg:w-5/6" }
     %div.home-main__label.flex.items-center
       = image_tag("clock.svg", alt: "Recently", class: "home-main__label__icon")
       %span Recently Viewed
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-
+      - 3.times do |i|
+        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Dashboard Name
+  
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
       %span Your Dashboards
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-
+      - 6.times do |i|
+        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Some Dashboard Name
+     
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
       %span Other Dashboards
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
-      %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Item 1
+      - 2.times do |i|
+        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Some Dashboard Name
+     

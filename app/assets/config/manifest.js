@@ -17,3 +17,8 @@
 //= link dashboards.svg
 //= link templates.svg
 //= link clock.svg
+//= link account.svg
+//= link cross.svg
+//= link label.svg
+//= link plus.svg
+//= link trash.svg

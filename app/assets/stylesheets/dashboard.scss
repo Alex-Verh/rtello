@@ -1,0 +1,163 @@
+@use "./variables.scss";
+
+.sidebar {
+  background-color: variables.$background-1;
+  transition: variables.$transition;
+
+  padding-bottom: 20px;
+
+  &__header {
+    border-bottom: 1px solid variables.$color-2;
+    padding: 15px 10px;
+  }
+
+  &__title {
+    font-size: 20px;
+
+    &__icon {
+      width: 25px;
+      height: 25px;
+      aspect-ratio: 1;
+    }
+  }
+
+  &__dashboard,
+  &__title {
+    &__icon {
+      color: #000;
+      background-color: variables.$color-1;
+      margin-inline-end: 7px;
+    }
+  }
+
+  &__toggle {
+    transform: rotate(90deg);
+    img {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &__label {
+    margin: 7px 0;
+    margin-inline-start: 10px;
+    font-size: 12px;
+    color: variables.$color-3;
+    user-select: none;
+  }
+
+  &__member {
+    padding: 8px 10px;
+    font-size: 14px;
+    user-select: none;
+
+    &__icon,
+    &__remove {
+      width: 16px;
+      height: 16px;
+    }
+
+    &__icon {
+      margin-inline-end: 10px;
+    }
+  }
+
+  &__btn {
+    padding: 8px 10px;
+
+    &_delete {
+      color: variables.$color-4;
+    }
+
+    &__icon {
+      margin-inline-end: 10px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__dashboard {
+    padding: 8px 10px;
+
+    &__icon {
+      width: 16px;
+      height: 16px;
+      aspect-ratio: 1;
+    }
+  }
+}
+
+.workspace {
+  padding: 30px 20px;
+
+  &__list {
+    width: 250px;
+    max-height: calc(100vh - 120px);
+
+    border-radius: 5px;
+    background-color: variables.$background-1;
+    margin-inline-end: 30px;
+
+    &__header {
+      padding: 10px 15px;
+      border-bottom: 1px solid variables.$color-2;
+      user-select: none;
+    }
+
+    &__icon {
+      width: 16px;
+      height: 16px;
+      aspect-ratio: 1;
+    }
+
+    &__add {
+      padding: 10px 15px;
+
+      .workspace__list__icon {
+        margin-inline-end: 7px;
+      }
+    }
+
+    &__tasks {
+      flex: 1;
+    }
+  }
+
+  &__task {
+    background-color: variables.$background-2;
+    font-size: 12px;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 5px 5px;
+    position: relative;
+
+    &__complete {
+      border-radius: 50%;
+      border: 1px solid variables.$color-2;
+      width: 12px;
+      height: 12px;
+      aspect-ratio: 1;
+      margin-inline-end: 10px;
+    }
+
+    &__icon {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+
+      img {
+        height: 10px;
+        width: 10px;
+        aspect-ratio: 1;
+      }
+    }
+
+    &_active {
+      color: variables.$color-2;
+
+      .workspace__task__complete {
+        background-color: variables.$color-5;
+      }
+    }
+  }
+}
