@@ -37,6 +37,8 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
+# ----------------------------------------------
+
 # Tailwind for styling/grid
 gem "tailwindcss-rails"
 
@@ -51,6 +53,26 @@ gem "sassc-rails"
 
 # Authentication with pre-built controllers, views, and routes for common authentication features like login, registration, password reset
 gem "devise"
+
+# Convert erb files into haml
+gem "html2haml"
+
+# Rswag uses RSpec to define API tests later generated into OpenAPI
+group :development, :test do
+  gem "rspec-rails"
+end
+
+group :development, :test do
+  gem "rswag"
+end
+
+# Postgres adapter
+gem "pg"
+
+# :oad the .env file automatically
+gem "dotenv-rails", groups: [ :development, :test ]
+
+# ----------------------------------------------------
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
