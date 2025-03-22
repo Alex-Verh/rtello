@@ -69,8 +69,11 @@ end
 # Postgres adapter
 gem "pg"
 
-# :oad the .env file automatically
+# Load the .env file automatically
 gem "dotenv-rails", groups: [ :development, :test ]
+
+# State management inside the models (actually not needed in my project :))
+gem "aasm"
 
 # ----------------------------------------------------
 
