@@ -15,18 +15,8 @@
     font-size: 20px;
 
     &__icon {
-      width: 25px;
-      height: 25px;
-      aspect-ratio: 1;
-    }
-  }
-
-  &__dashboard,
-  &__title {
-    &__icon {
-      color: #000;
-      background-color: variables.$color-1;
-      margin-inline-end: 7px;
+      width: 30px;
+      height: 30px;
     }
   }
 
@@ -78,16 +68,10 @@
 
   &__dashboard {
     padding: 8px 10px;
-
-    &__icon {
-      width: 16px;
-      height: 16px;
-      aspect-ratio: 1;
-    }
   }
 }
 
-.workspace {
+.dashboard {
   padding: 30px 20px;
 
   &__list {
@@ -113,7 +97,7 @@
     &__add {
       padding: 10px 15px;
 
-      .workspace__list__icon {
+      .dashboard__list__icon {
         margin-inline-end: 7px;
       }
     }
@@ -155,7 +139,7 @@
     &_active {
       color: variables.$color-2;
 
-      .workspace__task__complete {
+      .dashboard__task__complete {
         background-color: variables.$color-5;
       }
     }

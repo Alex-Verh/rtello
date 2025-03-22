@@ -1,9 +1,10 @@
 @use "./variables.scss";
+@use "./devise.scss";
 
 // Navigation Bar
 .navigation {
   background-color: variables.$background-1;
-  padding: 8px 50px;
+  padding-inline: 50px;
   border-bottom: 1px solid variables.$color-2;
   height: 50px;
 
@@ -13,14 +14,39 @@
 
   &__btn {
     margin-inline-end: 40px;
+    height: 100%;
+    position: relative;
 
     &_icon {
       margin-inline-start: 7px;
     }
   }
 
+  &__dropdown {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 1px);
+    background-color: variables.$background-3;
+    z-index: 1000;
+    width: 250px;
+    padding: 20px 15px;
+    border-radius: 0 0 5px 5px;
+
+    &__line {
+      border-bottom: 1px solid variables.$color-2;
+      margin: 10px 0;
+    }
+  }
+
   &__account {
     margin-inline: auto 0;
+    height: 100%;
+    position: relative;
+
+    .navigation__dropdown {
+      text-align: center;
+      width: 150px;
+    }
 
     &_avatar {
       font-size: 12px;
@@ -44,6 +70,48 @@ body {
   background-color: variables.$color-1;
   border-radius: 5px;
   padding: 4px 15px;
+}
+
+// Dashboard/Workspace
+.workspace {
+  &__icon {
+    color: #000;
+    background-color: variables.$color-1;
+    margin-inline-end: 7px;
+
+    width: 25px;
+    height: 25px;
+    aspect-ratio: 1;
+  }
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(#000, 0.5);
+  z-index: 1001;
+}
+
+.modal {
+  background-color: variables.$background-2;
+  padding: 20px 30px;
+  border-radius: 5px;
+  position: relative;
+
+  &__close {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+
+    width: 15px;
+    height: 15px;
+    aspect-ratio: 1;
+  }
 }
 
 /* Scrollbar track */

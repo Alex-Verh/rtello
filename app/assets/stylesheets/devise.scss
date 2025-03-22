@@ -1,0 +1,56 @@
+@use "./variables.scss";
+
+.register {
+  color: #fff;
+  margin: 100px auto;
+  width: 400px;
+
+  &__title {
+    font-size: 20px;
+    padding: 8px 10px;
+    border-bottom: 1px solid variables.$color-2;
+  }
+
+  .button {
+    display: block;
+    margin-inline: auto;
+    margin-top: 10px;
+  }
+
+  &__links {
+    font-size: 12px;
+    color: variables.$color-2;
+    margin-top: 15px;
+  }
+
+  &__link {
+    display: block;
+    margin-top: 7px;
+  }
+}
+
+.field {
+  &__label {
+    display: block;
+    font-size: 12px;
+    margin: 10px 0;
+  }
+
+  &__input {
+    outline: none;
+    background-color: variables.$background-1;
+    padding: 8px 10px;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  &__checkbox {
+    width: 16px;
+    height: 16px;
+    aspect-ratio: 1;
+
+    margin-inline-end: 7px;
+
+    accent-color: variables.$color-1;
+  }
+}

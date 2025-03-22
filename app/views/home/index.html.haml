@@ -5,11 +5,11 @@
 %div.home.container.mx-auto.text-white.flex.flex-col.md:flex-row.gap-4
   -# Home sidebar containing the links to dashboards/templates and related workspaces
   %aside.home-sidebar.w-full{ class: "md:w-1/4 lg:w-1/6" }
-    %div.home-sidebar__btn.flex.items-center
+    %div.home-sidebar__btn.flex.items-center.cursor-pointer
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-sidebar__btn__icon cursor-pointer")
       %button.cursor-pointer Dashboards
 
-    %div.home-sidebar__btn.home-sidebar__btn_active.flex.items-center
+    %div.home-sidebar__btn.home-sidebar__btn_active.flex.items-center.cursor-pointer
       = image_tag("templates.svg", alt: "Templates", class: "home-sidebar__btn__icon cursor-pointer")
       %button.cursor-pointer Templates
 
@@ -17,13 +17,11 @@
 
     %div.home-sidebar__label Working Space
 
-    %div.home-sidebar__workspace.flex.items-center
-      %div.home-sidebar__workspace__icon.cursor-pointer.flex.items-center.justify-center D
-      %button.cursor-pointer Dashboard Name 1
-
-    %div.home-sidebar__workspace.flex.items-center
-      %div.home-sidebar__workspace__icon.cursor-pointer.flex.items-center.justify-center D
-      %button.cursor-pointer Dashboard Name 1
+   
+    - 3.times do |i|
+      %div.workspace.home-sidebar__workspace.flex.items-center
+        %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
+        %button.cursor-pointer Dashboard Name 1
 
 
   %section.home-main.w-full{ class: "md:w-3/4 lg:w-5/6" }

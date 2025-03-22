@@ -17,21 +17,54 @@
       %div.navigation__btn.flex.items-center
         %button.cursor-pointer Dasboards
         = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+        %div.navigation__dropdown
+          - 3.times do |i|
+            %div.workspace.navigation__dropdown__item.flex.items-center
+              %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
+              %button.cursor-pointer Dashboard Name 1
+            %div.workspace.navigation__dropdown__line
 
       %div.navigation__btn.flex.items-center
         %button.cursor-pointer Recent
         = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+        %div.navigation__dropdown.hidden
+          - 3.times do |i|
+            %div.workspace.navigation__dropdown__item.flex.items-center
+              %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
+              %button.cursor-pointer Dashboard Name 1
+            %div.workspace.navigation__dropdown__line
 
       %div.navigation__btn.flex.items-center
         %button.cursor-pointer Templates
         = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
         
       %button.button.text-white.cursor-pointer Create
+      
+      %div.overlay.cursor-pointer.hidden
+        %div.register
+          %div.modal
+            = image_tag("cross.svg", alt: "×", class: "modal__close")
+            %div.register__title Create Blank Dashboard
+            -# = form_with model: @post, local: true do |f|
+            = form_with url: "/submit-form", local: true do |f|
+              .field
+                = f.label :title, "Dashboard Name", class: "field__label"
+                = f.text_field :title, class: "field__input"
+              .actions
+                = f.submit "Create Blank", class: "button cursor-pointer"
+
 
       %div.navigation__account.flex.items-center
         %div.navigation__account_avatar.flex.items-center.justify-center.cursor-pointer AV
         %button.cursor-pointer Account
         = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
+        %div.navigation__dropdown.hidden
+          %div.navigation__dropdown__item
+            %button.cursor-pointer Sign Up
+            %div.workspace.navigation__dropdown__line
+            %button.cursor-pointer Sign In
+            %div.workspace.navigation__dropdown__line
+            %button.cursor-pointer Log Out
 
     %main.main
       = yield
