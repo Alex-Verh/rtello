@@ -75,6 +75,10 @@ gem "dotenv-rails", groups: [ :development, :test ]
 # State management inside the models (actually not needed in my project :))
 gem "aasm"
 
+# Populates db with fake data
+gem "faker"
+
+
 # ----------------------------------------------------
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

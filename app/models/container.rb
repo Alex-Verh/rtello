@@ -1,5 +1,5 @@
 class Container < ApplicationRecord
-  enum type: { Dashboard: 0, Template: 1 }
+  enum :container_type, [ :dashboard, :template ]
 
   # Associations
   belongs_to :user
@@ -8,5 +8,5 @@ class Container < ApplicationRecord
   has_many :lists, dependent: :destroy
 
   # name and type attributes
-  validates :name, :type, presence: true
+  validates :name, :container_type, presence: true
 end

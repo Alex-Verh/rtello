@@ -1,4 +1,6 @@
 class DashboardTask < ApplicationRecord
+  include AASM
+
   # Associations
   belongs_to :task
 

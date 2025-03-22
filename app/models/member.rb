@@ -1,4 +1,4 @@
-class DashboardMember < ApplicationRecord
+class Member < ApplicationRecord
   # Associations
   belongs_to :dashboard
   belongs_to :user

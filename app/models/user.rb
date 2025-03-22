@@ -6,8 +6,8 @@ class User < ApplicationRecord
 
   # Associations
   has_many :containers, dependent: :destroy
-  has_many :dashboard_members, dependent: :destroy
-  has_many :dashboards, through: :dashboard_members
+  has_many :members, dependent: :destroy
+  has_many :dashboards, through: :members
 
   # first and last name for the user model
   validates :first_name, :last_name, presence: true
