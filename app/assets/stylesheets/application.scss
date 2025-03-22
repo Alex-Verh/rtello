@@ -1,5 +1,6 @@
 @use "./variables.scss";
 @use "./devise.scss";
+@use "../fonts/fonts.scss";
 
 // Navigation Bar
 .navigation {
@@ -63,6 +64,7 @@
 
 body {
   background-color: variables.$background-2;
+  font-family: OpenSans, sans-serif;
 }
 
 // Button
