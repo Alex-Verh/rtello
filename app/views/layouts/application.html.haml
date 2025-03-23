@@ -63,9 +63,9 @@
             - if user_signed_in?
               = button_to "Log Out", destroy_user_session_path, method: :delete, class: "cursor-pointer"
             - else
-              %button.cursor-pointer Sign Up
+              = link_to "Sign Up", new_user_registration_path, class: "cursor-pointer "
               %div.workspace.navigation__dropdown__line
-              %button.cursor-pointer Sign In
+              = link_to "Sign In", new_user_session_path, class: "cursor-pointer "
               %div.workspace.navigation__dropdown__line
               = button_to user_google_oauth2_omniauth_authorize_path, method: :post,:data => {turbo: "false"}, class: "google-sign-in-btn cursor-pointer" do
                 = image_tag("https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png", alt: "Sign in with Google")

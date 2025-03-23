@@ -82,6 +82,13 @@ gem "faker"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 
+# Preview email in the default browser instead of sending it
+group :development do
+  gem "letter_opener"
+  gem "letter_opener_web"
+end
+
+
 
 # ----------------------------------------------------
 

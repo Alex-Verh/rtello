@@ -1,10 +1,4 @@
-\%h2 Resend confirmation instructions
-\= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
-\= render "devise/shared/error_messages", resource: resource
-\.field
-\= f.label :email
-\%br/
-\= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
-\.actions
-\= f.submit "Resend confirmation instructions"
-\= render "devise/shared/links"
+%p Rtello - Resend Confirmation!
+%p Welcome to Rtello, #{@resource.email}!
+%p= link_to 'Change my password', user_confirmation_url(confirmation_token: @token)
+%p If you didn't request this, please ignore this email.

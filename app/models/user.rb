@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+         :confirmable, :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
 
   # Associations
@@ -22,7 +22,11 @@ class User < ApplicationRecord
     user = User.find_by(email: auth.info.email.downcase)
     if user
       # add google auth details if user previously manually registered
-      user.update(provider: auth.provider, uid: auth.uid) unless user.uid.present?
+      if !user.confirmed?
+        user.skip_confirmation!
+        user.save!
+      end
+      user.update(provider: auth.provider, uid: auth.uid) unless user.provider.present? && user.uid.present?
     else
       user = User.new(
         email: auth.info.email.downcase,
@@ -32,6 +36,8 @@ class User < ApplicationRecord
         provider: auth.provider,
         uid: auth.uid
       )
+
+      user.skip_confirmation!
       user.save!
     end
 
