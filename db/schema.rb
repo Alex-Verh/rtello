@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_22_195545) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_23_132947) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -104,6 +104,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_22_195545) do
     t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

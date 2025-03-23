@@ -78,6 +78,10 @@ gem "aasm"
 # Populates db with fake data
 gem "faker"
 
+# Google OAuth
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection", "~> 1.0"
+
 
 # ----------------------------------------------------
 

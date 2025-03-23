@@ -9,7 +9,7 @@
     = stylesheet_link_tag "tailwind", media: "all", "data-turbolinks-track": "reload" # tailwind
     = yield :stylesheets # inject page specific stylesheet
     = javascript_include_tag "application", type: "module", "data-turbolinks-track": "reload" # typescript
-
+    
   %body.h-screen
     %nav.navigation.text-white.flex.items-center
       %div.navigation__logo.font-bold.cursor-pointer Rtello
@@ -58,13 +58,17 @@
         %div.navigation__account_avatar.flex.items-center.justify-center.cursor-pointer AV
         %button.cursor-pointer Account
         = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
-        %div.navigation__dropdown.hidden
+        %div.navigation__dropdown
           %div.navigation__dropdown__item
-            %button.cursor-pointer Sign Up
-            %div.workspace.navigation__dropdown__line
-            %button.cursor-pointer Sign In
-            %div.workspace.navigation__dropdown__line
-            %button.cursor-pointer Log Out
-
+            - if user_signed_in?
+              = button_to "Log Out", destroy_user_session_path, method: :delete, class: "cursor-pointer"
+            - else
+              %button.cursor-pointer Sign Up
+              %div.workspace.navigation__dropdown__line
+              %button.cursor-pointer Sign In
+              %div.workspace.navigation__dropdown__line
+              = button_to user_google_oauth2_omniauth_authorize_path, method: :post,:data => {turbo: "false"}, class: "google-sign-in-btn cursor-pointer" do
+                = image_tag("https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png", alt: "Sign in with Google")
+          
     %main.main
       = yield
