@@ -6,5 +6,7 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
   root "home#index"
+  get "home/templates", to: "home#templates"
   get "dashboard", to: "dashboard#index"
+  get "template", to: "template#index"
 end

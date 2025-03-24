@@ -1,0 +1,17 @@
+%aside.home-sidebar.w-full{ class: "md:w-1/4 lg:w-1/6" }
+  = link_to root_path, class: "home-sidebar__btn flex items-center cursor-pointer #{'home-sidebar__btn_active' if isRoot}" do
+    = image_tag("dashboards.svg", alt: "Dashboards", class: "home-sidebar__btn__icon cursor-pointer")
+    %span.cursor-pointer Dashboards
+
+  = link_to home_templates_path, class: "home-sidebar__btn flex items-center cursor-pointer #{'home-sidebar__btn_active' unless isRoot}" do
+    = image_tag("templates.svg", alt: "Templates", class: "home-sidebar__btn__icon cursor-pointer")
+    %span.cursor-pointer Templates
+
+  %div.home-sidebar__line 
+
+  %div.home-sidebar__label Working Space
+
+  - 3.times do |i|
+    %div.workspace.home-sidebar__workspace.flex.items-center
+      %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
+      %button.cursor-pointer Dashboard Name 1

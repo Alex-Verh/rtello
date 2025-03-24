@@ -3,33 +3,32 @@
   = stylesheet_link_tag 'pages/home'
 
 %div.home.container.mx-auto.text-white.flex.flex-col.md:flex-row.gap-4
-  -# Home sidebar containing the links to dashboards/templates and related workspaces
  
-  = render "shared/aside", isRoot: true
+  = render "shared/aside", isRoot: false
 
   %section.home-main.w-full{ class: "md:w-3/4 lg:w-5/6" }
     %div.home-main__label.flex.items-center
       = image_tag("clock.svg", alt: "Recently", class: "home-main__label__icon")
-      %span Recently Viewed
+      %span Popular Templates
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - 3.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Dashboard Name
+        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Template {i + 1}
   
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
-      %span Your Dashboards
+      %span Your Templates
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - 6.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Some Dashboard Name
+        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Template {i + 1}
      
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
-      %span Other Dashboards
+      %span Search Template
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - 2.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Some Dashboard Name
+        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Template {i + 1}
      
