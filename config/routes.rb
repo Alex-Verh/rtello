@@ -7,6 +7,6 @@ Rails.application.routes.draw do
   }
   root "home#index"
   get "home/templates", to: "home#templates"
-  get "dashboard", to: "dashboard#index"
-  get "template", to: "template#index"
+  get "dashboard/:id", to: "dashboard#index", as: :dashboard
+  get "template/:id", to: "template#index", as: :template
 end

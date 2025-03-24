@@ -11,22 +11,27 @@
       = image_tag("clock.svg", alt: "Recently", class: "home-main__label__icon")
       %span Popular Templates
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      - 3.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Template {i + 1}
-  
+      - if @popular_templates.any?
+        - @popular_templates.each do |template|
+          = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+      - else
+        %span.text-gray-500 No templates.
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
       %span Your Templates
-
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      - 6.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Template {i + 1}
-     
+      - if @own_templates.any?
+        - @own_templates.each do |template|
+          = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+      - else
+        %span.text-gray-500 No templates.
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
-      %span Search Template
+      %span Search Template:
+      %input.field__input.home-main__label__input
+      %button.button.cursor-pointer Search
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - 2.times do |i|

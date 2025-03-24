@@ -19,13 +19,13 @@ export const enableModal = (buttonId: string, isPopup: boolean = false) => {
   }
 
   openBtn.addEventListener("click", function onClick() {
-    modal.classList.remove("hidden");
+    modal.classList.toggle("hidden");
     isPopup ? closePopup(modal, openBtn) : closeModal(modal);
   });
 };
 
 // closing overlay & modal
-export const closeModal = (modal: HTMLElement) => {
+const closeModal = (modal: HTMLElement) => {
   const closeBtn = modal.querySelector(".modal__close") as HTMLElement | null;
   if (!closeBtn) {
     console.warn("Close button not found in modal.");
@@ -44,7 +44,7 @@ export const closeModal = (modal: HTMLElement) => {
 };
 
 // closing popup
-export const closePopup = (popup: HTMLElement, openBtn: HTMLElement) => {
+const closePopup = (popup: HTMLElement, openBtn: HTMLElement) => {
   document.addEventListener("click", function (e: Event) {
     if (
       !popup.contains(e.target as Node) &&
@@ -52,5 +52,15 @@ export const closePopup = (popup: HTMLElement, openBtn: HTMLElement) => {
     ) {
       popup.classList.add("hidden");
     }
+  });
+};
+
+// Sidebar
+export const enableSidebar = () => {
+  const sidebar = document.querySelector(".sidebar");
+  const toggleButton = sidebar?.querySelector(".sidebar__toggle");
+
+  toggleButton?.addEventListener("click", function () {
+    sidebar?.classList.toggle("collapsed");
   });
 };

@@ -17,18 +17,21 @@
     %nav.navigation.text-white.flex.items-center
       = link_to "Rtello", root_path, class: "navigation__logo font-bold cursor-pointer"
       - if user_signed_in?
-        %div.navigation__btn.flex.items-center{id: "seeDashboards", data_modal: "dashboardsPopup"}
-          %button.cursor-pointer Dasboards
+        %div.navigation__btn.flex.items-center
+          %button.cursor-pointer{id: "seeDashboards", data_modal: "dashboardsPopup"} Dasboards
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
           %div.navigation__dropdown.hidden{id: "dashboardsPopup"}
-            - 3.times do |i|
-              %div.workspace.navigation__dropdown__item.flex.items-center
-                %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
-                %button.cursor-pointer Dashboard Name 1
-              %div.workspace.navigation__dropdown__line
+            - if @all_dashboards.any?
+              - @all_dashboards.each do |dashboard|
+                %div.workspace.navigation__dropdown__item.flex.items-center
+                  %div.workspace__icon.cursor-pointer.flex.items-center.justify-center= dashboard.container.name[0]
+                  = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "cursor-pointer"
+                %div.workspace.navigation__dropdown__line
+            - else 
+              %span.text-gray-500 No dashboards.
 
-        %div.navigation__btn.flex.items-center{id: "seeRecents", data_modal: "recentsPopup"}
-          %button.cursor-pointer Recent
+        %div.navigation__btn.flex.items-center
+          %button.cursor-pointer{id: "seeRecents", data_modal: "recentsPopup"} Recent
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
           %div.navigation__dropdown.hidden{id: "recentsPopup"}
             - 3.times do |i|
@@ -37,39 +40,39 @@
                 %button.cursor-pointer Dashboard Name 1
               %div.workspace.navigation__dropdown__line
 
-        %div.navigation__btn.flex.items-center{id: "seeTemplates", data_modal: "templatesPopup"}
-          %button.cursor-pointer Templates
+        %div.navigation__btn.flex.items-center
+          %button.cursor-pointer{id: "seeTemplates", data_modal: "templatesPopup"} Templates
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
           %div.navigation__dropdown.hidden{id: "templatesPopup"}
-            - 3.times do |i|
-              %div.workspace.navigation__dropdown__item.flex.items-center
-                %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
-                %button.cursor-pointer Template Name 1
-              %div.workspace.navigation__dropdown__line
+            - if @all_templates.any?
+              - @all_templates.each do |template|
+                %div.workspace.navigation__dropdown__item.flex.items-center
+                  %div.workspace__icon.cursor-pointer.flex.items-center.justify-center= template.container.name[0]
+                  = link_to template.container.name, template_path(template.id), class: "cursor-pointer"
+                %div.workspace.navigation__dropdown__line
+            - else 
+              %span.text-gray-500 No templates.
 
         %button.button.text-white.cursor-pointer{id: "createDashboard", data_modal: "dashboardModal"} Create
         
-        %div.overlay.cursor-pointer.hidden{id: "dashboardModal"}
-          %div.register
-            %div.modal
-              = image_tag("cross.svg", alt: "×", class: "modal__close")
-              %div.register__title Create Blank Dashboard
-              -# = form_with model: @post, local: true do |f|
-              = form_with url: "/submit-form", local: true do |f|
-                .field
-                  = f.label :title, "Dashboard Name", class: "field__label"
-                  = f.text_field :title, class: "field__input"
-                .actions
-                  = f.submit "Create Blank", class: "button cursor-pointer"
+        = render "shared/modal", id: "dashboardModal" do
+          %div.register__title Create Blank Dashboard
+          = form_with url: "/submit-form", local: true do |f|
+            .field
+              = f.label :title, "Dashboard Name", class: "field__label"
+              = f.text_field :title, class: "field__input"
+            .actions
+              = f.submit "Create Blank", class: "button cursor-pointer"
 
-
-      %div.navigation__account.flex.items-center{id: "seeAccount", data_modal: "accountPopup"}
+      %div.navigation__account.flex.items-center
         %div.navigation__account_avatar.flex.items-center.justify-center.cursor-pointer AV
-        %button.cursor-pointer Account
+        %button.cursor-pointer{id: "seeAccount", data_modal: "accountPopup"} Account
         = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
         %div.navigation__dropdown.hidden{id: "accountPopup"}
           %div.navigation__dropdown__item
             - if user_signed_in?
+              %button.cursor-pointer= current_user.full_name
+              %div.workspace.navigation__dropdown__line
               = button_to "Log Out", destroy_user_session_path, method: :delete, class: "cursor-pointer"
             - else
               = link_to "Sign Up", new_user_registration_path, class: "cursor-pointer "

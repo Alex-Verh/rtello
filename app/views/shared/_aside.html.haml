@@ -10,8 +10,10 @@
   %div.home-sidebar__line 
 
   %div.home-sidebar__label Working Space
-
-  - 3.times do |i|
-    %div.workspace.home-sidebar__workspace.flex.items-center
-      %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
-      %button.cursor-pointer Dashboard Name 1
+  - if @all_dashboards.any?
+    - @all_dashboards.each do |dashboard|
+      %div.workspace.home-sidebar__dashboard.flex.items-center
+        %div.workspace__icon.cursor-pointer.flex.items-center.justify-center= dashboard.container.name[0]
+        = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "cursor-pointer"
+  - else 
+    %span.text-gray-500 No dashboards.

@@ -1,3 +1,7 @@
 import "../../assets/stylesheets/dashboard.scss";
+import { enableModal, enableSidebar } from "../functions/modal";
 
-console.log("Dashboard page loaded");
+document.addEventListener("turbo:load", () => {
+  enableModal("createList");
+  enableSidebar();
+});

@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :load_user_containers, if: :user_signed_in?
 
   protected
 
@@ -12,5 +13,20 @@ class ApplicationController < ActionController::Base
 
     # Permit `first_name` and `last_name` for account updates
     devise_parameter_sanitizer.permit(:account_update, keys: [ :first_name, :last_name ])
+  end
+
+
+  private
+
+  # all dashboards and templates of the authenticated user
+  def load_user_containers
+  @all_dashboards = Dashboard.includes(:container)
+  .left_joins(:members)
+  .where(containers: { user_id: current_user.id })
+  .where("containers.user_id = :user_id OR members.user_id = :user_id", user_id: current_user.id)
+  .distinct
+
+  @all_templates = Template.includes(:container)
+  .where(containers: { user_id: current_user.id })
   end
 end

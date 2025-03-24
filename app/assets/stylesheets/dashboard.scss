@@ -6,6 +6,25 @@
 
   padding-bottom: 20px;
 
+  &.collapsed {
+    width: 4rem !important;
+    .sidebar__label,
+    .sidebar__btn,
+    .sidebar__title,
+    .sidebar__member,
+    .sidebar__dashboard {
+      display: none;
+    }
+
+    .sidebar__header {
+      justify-content: center !important;
+    }
+
+    .sidebar__toggle {
+      transform: rotate(-90deg);
+    }
+  }
+
   &__header {
     border-bottom: 1px solid variables.$color-2;
     padding: 15px 10px;
@@ -77,6 +96,7 @@
   &__list {
     width: 250px;
     max-height: calc(100vh - 120px);
+    height: fit-content;
 
     border-radius: 5px;
     background-color: variables.$background-1;

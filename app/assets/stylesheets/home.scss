@@ -57,6 +57,11 @@
       margin-bottom: 20px;
       user-select: none;
 
+      &__input {
+        width: 200px !important;
+        margin-inline: 15px;
+      }
+
       &__icon {
         margin-inline-end: 7px;
       }

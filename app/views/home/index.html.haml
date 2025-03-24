@@ -14,22 +14,26 @@
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - 3.times do |i|
         %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Dashboard Name
-  
+
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
       %span Your Dashboards
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      - 6.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Some Dashboard Name
-     
+      - if @own_dashboards.any?
+        - @own_dashboards.each do |dashboard|
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+      - else
+        %span.text-gray-500 No dashboards.
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
       %span Other Dashboards
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      - 2.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Some Dashboard Name
-     
+      - if @other_dashboards.any?
+        - @other_dashboards.each do |dashboard|
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+      - else
+        %span.text-gray-500 No dashboards.

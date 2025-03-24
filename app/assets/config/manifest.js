@@ -22,3 +22,4 @@
 //= link label.svg
 //= link plus.svg
 //= link trash.svg
+//= link leave.svg

@@ -4,7 +4,7 @@
 
 %div.grid.text-white{ style: "grid-template-columns: auto 1fr;  height: calc(100vh - 50px);" }
   
-  = render "shared/sidebar"
+  = render "shared/sidebar", dashboard: @dashboard
  
   %section.dashboard.overflow-x-auto
     %div.flex.flex-nowrap
@@ -16,7 +16,7 @@
               = image_tag("trash.svg", alt: "Delete", class: "cursor-pointer dashboard__list__icon")
 
           %div.dashboard__list__tasks.overflow-y-scroll
-            - 5.times do |i|
+            - 7.times do |i|
               %div.dashboard__task.flex.items-center.cursor-pointer
                 %button.dashboard__task__complete.cursor-pointer
                 %span Fix: Change paragraphs that are "Ads/Trying to Sell" to a more formal report text.
@@ -27,3 +27,17 @@
             = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
             %button.cursor-pointer Add new task
 
+      -# Add new list btn
+      %div.dashboard__list.flex-shrink-0.flex.flex-col{id: "createList", data_modal: "listModal"}
+        %div.dashboard__list__add.flex.items-center
+          = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
+          %button.cursor-pointer Add new list
+
+      = render "shared/modal", id: "listModal" do
+        %div.register__title Create New List
+        = form_with url: "/submit-form", local: true do |f|
+          .field
+            = f.label :title, "List Name", class: "field__label"
+            = f.text_field :title, class: "field__input"
+          .actions
+            = f.submit "Create List", class: "button cursor-pointer"
