@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_23_141142) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_25_181453) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -61,7 +61,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_141142) do
     t.bigint "container_id"
     t.string "name"
     t.integer "position"
-    t.integer "list_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["container_id"], name: "index_lists_on_container_id"
@@ -80,7 +79,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_141142) do
     t.bigint "list_id"
     t.string "description"
     t.integer "position"
-    t.integer "task_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["list_id"], name: "index_tasks_on_list_id"
