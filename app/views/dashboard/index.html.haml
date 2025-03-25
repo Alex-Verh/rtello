@@ -7,17 +7,17 @@
   = render "shared/sidebar", dashboard: @dashboard
  
   %section.dashboard.overflow-x-auto
-    %div.flex.flex-nowrap
+    %div.flex.flex-nowrap#lists-container
       - 5.times do |i|
-        %div.dashboard__list.flex-shrink-0.flex.flex-col
+        %div.dashboard__list.flex-shrink-0.flex.flex-col.cursor-grab{ data: { list_id: i } }
           %div.dashboard__list__header.flex.items-center.justify-between
             %div.dashboard__list__title List Name
             %button
               = image_tag("trash.svg", alt: "Delete", class: "cursor-pointer dashboard__list__icon")
 
-          %div.dashboard__list__tasks.overflow-y-scroll
-            - 7.times do |i|
-              %div.dashboard__task.flex.items-center.cursor-pointer
+          %div.dashboard__list__tasks.overflow-y-scroll{ data: { list_id: i } }
+            - 7.times do |j|
+              %div.dashboard__task.flex.items-center.cursor-grab{ data: { task_id: j } }
                 %button.dashboard__task__complete.cursor-pointer
                 %span Fix: Change paragraphs that are "Ads/Trying to Sell" to a more formal report text.
                 %button.dashboard__task__icon
@@ -28,11 +28,11 @@
             %button.cursor-pointer Add new task
 
       -# Add new list btn
-      %div.dashboard__list.flex-shrink-0.flex.flex-col{id: "createList", data_modal: "listModal"}
-        %div.dashboard__list__add.flex.items-center
-          = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
-          %button.cursor-pointer Add new list
+      %div.dashboard__list__add.flex.items-center{id: "createList", data_modal: "listModal"}
+        = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
+        %button.cursor-pointer Add new list
 
+      -# Modal to create new list
       = render "shared/modal", id: "listModal" do
         %div.register__title Create New List
         = form_with url: "/submit-form", local: true do |f|

@@ -116,6 +116,9 @@
 
     &__add {
       padding: 10px 15px;
+      border-radius: 5px;
+      background-color: variables.$background-1;
+      height: fit-content;
 
       .dashboard__list__icon {
         margin-inline-end: 7px;
