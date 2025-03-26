@@ -1,6 +1,8 @@
-= javascript_include_tag "pages/dashboard", type: "module", "data-turbolinks-track": "reload"
 - content_for :stylesheets do
   = stylesheet_link_tag 'pages/dashboard'
+  
+- content_for :page_specific_js do 
+  = javascript_include_tag "pages/dashboard", type: "module", "data-turbolinks-track": "reload"
 
 %div.grid.text-white{ style: "grid-template-columns: auto 1fr;  height: calc(100vh - 50px);" }
   

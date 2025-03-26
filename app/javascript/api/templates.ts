@@ -44,6 +44,7 @@ export const updateTemplate = async (id: string, name: string) => {
 export const deleteTemplate = async (id: string) => {
   try {
     const response = await axios.delete(`/api/templates/${id}`);
+    window.location.href = `/`;
     useToast("Template deleted successfully!", "success");
     return response.data;
   } catch (error) {

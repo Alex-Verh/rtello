@@ -5,8 +5,7 @@ import { reorderTasks } from "../api/tasks";
 export const enableSortable = () => {
   const listsContainer = document.getElementById("lists-container");
   if (listsContainer) {
-    const containerId = (listsContainer.dataset.dashboardId ||
-      listsContainer.dataset.templateId) as string;
+    const containerId = listsContainer.dataset.containerId as string;
 
     new Sortable(listsContainer, {
       animation: 150,
@@ -19,7 +18,7 @@ export const enableSortable = () => {
         ).map((l, index) => {
           const list = l as HTMLElement;
           return {
-            id: list.dataset?.listId as string,
+            id: list.getAttribute("data-list-id") as string,
             position: index as number,
             container_id: containerId,
           };

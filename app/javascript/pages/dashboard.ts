@@ -35,11 +35,7 @@ document.addEventListener("turbo:load", () => {
 
   const dashboardId = container.dataset?.dashboardId as string;
   const templateId = container.dataset?.templateId as string;
-
-  console.log(dashboardId);
-  console.log(templateId);
-
-  const containerId = (dashboardId || templateId) as string;
+  const containerId = container.dataset?.containerId as string;
 
   // delete container button
   const deleteBtn = document.querySelector("#delete-container") as HTMLElement;
@@ -59,9 +55,13 @@ document.addEventListener("turbo:load", () => {
         "Workspace Name",
         "name",
         "Change",
-        (newName) => {
-          if (dashboardId) updateDashboard(dashboardId, newName);
-          if (templateId) updateTemplate(templateId, newName);
+        async (newName) => {
+          if (dashboardId) await updateDashboard(dashboardId, newName);
+          if (templateId) await updateTemplate(templateId, newName);
+          const containerName = document.querySelector(
+            "#container-name"
+          ) as HTMLElement;
+          containerName.textContent = newName;
         }
       );
     });

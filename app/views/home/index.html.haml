@@ -1,6 +1,7 @@
-= javascript_include_tag "pages/home", type: "module", "data-turbolinks-track": "reload"
 - content_for :stylesheets do
   = stylesheet_link_tag 'pages/home'
+- content_for :page_specific_js do 
+  = javascript_include_tag "pages/home", type: "module", "data-turbolinks-track": "reload"
 
 %div.home.container.mx-auto.text-white.flex.flex-col.md:flex-row.gap-4
   -# Home sidebar containing the links to dashboards/templates and related workspaces

@@ -2,7 +2,7 @@
     %div.sidebar__header.flex.items-center.justify-between
         %div.workspace.sidebar__title.flex.items-center.cursor-pointer
             %div.workspace__icon.sidebar__title__icon.cursor-pointer.flex.items-center.justify-center= container.container.name[0]
-            %span= container.container.name
+            %span#container-name= container.container.name
         %button.sidebar__toggle
             = image_tag("arrow.svg", alt: "▸", class: "cursor-pointer")
 
