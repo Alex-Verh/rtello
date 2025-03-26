@@ -1,7 +1,9 @@
 import "../../assets/stylesheets/home.scss";
-import { createTemplate } from "../api/templates";
+import { createTemplate, searchTemplates } from "../api/templates";
 import axios from "axios";
 import { openModal } from "../functions/modal";
+import { templateHTML } from "../dom";
+import { TemplateResponse } from "../interfaces";
 
 document.addEventListener("turbo:load", () => {
   const csrfToken = document
@@ -22,9 +24,43 @@ document.addEventListener("turbo:load", () => {
         "name",
         "Create",
         async (name) => {
-          const data = await createTemplate(name);
+          await createTemplate(name);
         }
       );
     });
+
+    // search templates
+    const searchBtn = document.querySelector(
+      "#search-templates"
+    ) as HTMLElement;
+    if (searchBtn) {
+      const templatesContainer = document.querySelector(
+        "#templates-container"
+      ) as HTMLElement;
+      if (!templatesContainer) return;
+
+      searchBtn.addEventListener("click", () => {
+        openModal(
+          "Search Template",
+          "Template Name",
+          "name",
+          "Search",
+          async (name) => {
+            const templates = (await searchTemplates(
+              name
+            )) as Array<TemplateResponse>;
+
+            templatesContainer.innerHTML = "";
+
+            templates.forEach((template: TemplateResponse) => {
+              templatesContainer.insertAdjacentElement(
+                "afterbegin",
+                templateHTML(template.id, template.container.name)
+              );
+            });
+          }
+        );
+      });
+    }
   }
 });

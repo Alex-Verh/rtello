@@ -36,7 +36,10 @@ document.addEventListener("turbo:load", () => {
   const dashboardId = container.dataset?.dashboardId as string;
   const templateId = container.dataset?.templateId as string;
 
-  const containerId = dashboardId || (templateId as string);
+  console.log(dashboardId);
+  console.log(templateId);
+
+  const containerId = (dashboardId || templateId) as string;
 
   // delete container button
   const deleteBtn = document.querySelector("#delete-container") as HTMLElement;

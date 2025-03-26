@@ -44,11 +44,14 @@
           %button.cursor-pointer{id: "see-recents", data_modal: "recents-popup"} Recent
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
           %div.navigation__dropdown.hidden{id: "recents-popup"}
-            - 3.times do |i|
-              %div.workspace.navigation__dropdown__item.flex.items-center
-                %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
-                %button.cursor-pointer Dashboard Name 1
-              %div.workspace.navigation__dropdown__line
+            - if @recent_dashboards.any?
+              - @recent_dashboards.each do |dashboard|
+                %div.workspace.navigation__dropdown__item.flex.items-center
+                  %div.workspace__icon.cursor-pointer.flex.items-center.justify-center= dashboard.container.name[0]
+                  = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "cursor-pointer"
+                %div.workspace.navigation__dropdown__line
+            - else 
+              %span.text-gray-500 No recently visited.
 
         %div.navigation__btn.flex.items-center
           %button.cursor-pointer{id: "see-templates", data_modal: "templates-popup"} Templates

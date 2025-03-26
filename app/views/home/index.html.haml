@@ -6,15 +6,18 @@
   -# Home sidebar containing the links to dashboards/templates and related workspaces
  
   = render "shared/aside", isRoot: true
+  - colors = ["#291b64", "#06330f", "#1d2c6d", "#502a3f", "#4b4d2b"] # colors for dashboards
 
   %section.home-main.w-full{ class: "md:w-3/4 lg:w-5/6" }
     %div.home-main__label.flex.items-center
       = image_tag("clock.svg", alt: "Recently", class: "home-main__label__icon")
       %span Recently Viewed
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      - 3.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Dashboard Name
-
+      - if @recent_dashboards.any?
+        - @recent_dashboards.each_with_index do |dashboard, index|
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
+      - else
+        %span.text-gray-500 No recently visited.
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
@@ -22,8 +25,8 @@
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @own_dashboards.any?
-        - @own_dashboards.each do |dashboard|
-          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+        - @own_dashboards.each_with_index do |dashboard, index|
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
       - else
         %span.text-gray-500 No dashboards.
 
@@ -33,7 +36,7 @@
 
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @other_dashboards.any?
-        - @other_dashboards.each do |dashboard|
-          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+        - @other_dashboards.each_with_index do |dashboard, index|
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
       - else
-        %span.text-gray-500 No dashboards.
+        %span.text-gray-500 No other dashboards you are member of.

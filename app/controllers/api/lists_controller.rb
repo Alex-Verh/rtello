@@ -52,6 +52,8 @@ class Api::ListsController < ApplicationController
       list = List.find_by(id: params[:id])
       return render json: { error: "List not found" }, status: :not_found if list.nil?
       container_id = list.container_id
+    elsif params[:lists] && action_name == "reorder"
+      container_id = params[:lists].first[:container_id]
     else
       container_id = params[:list][:container_id]
     end

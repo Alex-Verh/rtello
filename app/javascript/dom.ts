@@ -62,3 +62,15 @@ export const taskHTML = (
 
   return wrapper;
 };
+
+export const templateHTML = (id: number, name: string): HTMLElement => {
+  const wrapper = document.createElement("a");
+
+  wrapper.className =
+    "home-main__dashboard flex items-center justify-center cursor-pointer";
+  wrapper.href = `/template/${id}`;
+  wrapper.innerHTML = `${name}`;
+  wrapper.style = "background-color: #291b64;";
+
+  return wrapper;
+};

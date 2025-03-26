@@ -96,3 +96,35 @@ export const enableSidebar = () => {
     sidebar?.classList.toggle("collapsed");
   });
 };
+
+export const useToast = (message: string, type: string) => {
+  const getAssetUrl = (imageName: string) => {
+    return `/assets/${imageName}`;
+  };
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast_${type} flex items-center justify-center cursor-pointer`;
+  toast.innerHTML = `
+      <img src="${getAssetUrl(
+        "cross.svg"
+      )}" alt="Close" class="toast__close cursor-pointer">
+      <div class="taost__message">${message}</div>
+  `;
+
+  document.body.insertAdjacentElement("afterbegin", toast);
+
+  // Automatically remove the alert after 3 seconds
+  setTimeout(() => {
+    toast.classList.add("fade-out");
+    setTimeout(() => {
+      toast.remove();
+    }, 1500);
+  }, 3000);
+
+  const closeButton = toast.querySelector(".toast__close");
+  if (closeButton) {
+    closeButton.addEventListener("click", () => {
+      toast.remove();
+    });
+  }
+};

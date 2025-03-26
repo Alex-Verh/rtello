@@ -5,6 +5,7 @@
 %div.home.container.mx-auto.text-white.flex.flex-col.md:flex-row.gap-4
  
   = render "shared/aside", isRoot: false
+  - colors = ["#291b64", "#06330f", "#1d2c6d", "#502a3f", "#4b4d2b"] # colors for templates
 
   %section.home-main.w-full{ class: "md:w-3/4 lg:w-5/6" }
     %div.home-main__label.flex.items-center
@@ -12,8 +13,8 @@
       %span Popular Templates
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @popular_templates.any?
-        - @popular_templates.each do |template|
-          = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+        - @popular_templates.each_with_index do |template, index|
+          = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
       - else
         %span.text-gray-500 No templates.
 
@@ -23,18 +24,16 @@
       %button.button.cursor-pointer{id: "create-template"} Create
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @own_templates.any?
-        - @own_templates.each do |template|
-          = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
+        - @own_templates.each_with_index do |template, index|
+          = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
       - else
         %span.text-gray-500 No templates.
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
-      %span Search Template:
-      %input.field__input.home-main__label__input
-      %button.button.cursor-pointer Search
+      %span Search Template
+      %button.button.cursor-pointer#search-templates Search
 
-    %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
-      - 2.times do |i|
-        %button.home-main__dashboard.flex.items-center.justify-center.cursor-pointer Template {i + 1}
+    %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4#templates-container
+      
      

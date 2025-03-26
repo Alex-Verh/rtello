@@ -20,13 +20,18 @@ class ApplicationController < ActionController::Base
 
   # all dashboards and templates of the authenticated user
   def load_user_containers
-  @all_dashboards = Dashboard.includes(:container)
-  .left_joins(:members)
-  .where(containers: { user_id: current_user.id })
-  .where("containers.user_id = :user_id OR members.user_id = :user_id", user_id: current_user.id)
-  .distinct
+    @all_dashboards = Dashboard.includes(:container)
+    .left_joins(:members)
+    .where(containers: { user_id: current_user.id })
+    .where("containers.user_id = :user_id OR members.user_id = :user_id", user_id: current_user.id)
+    .distinct
 
-  @all_templates = Template.includes(:container)
-  .where(containers: { user_id: current_user.id })
+    last_visited = session[:visited_dashboards] || []
+    recent_dashboards = Dashboard.where(id: last_visited).pluck(:id) # get only non-deleted
+    session[:visited_dashboards] = recent_dashboards # refresh
+    @recent_dashboards = Dashboard.where(id: recent_dashboards)
+
+    @all_templates = Template.includes(:container)
+    .where(containers: { user_id: current_user.id })
   end
 end

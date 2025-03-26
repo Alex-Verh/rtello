@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useToast } from "../functions/modal";
 
 export const createDashboard = async (name: string) => {
   try {
@@ -8,15 +9,16 @@ export const createDashboard = async (name: string) => {
 
     if (response.data.id) {
       window.location.href = `/dashboard/${response.data.id}`;
+      useToast("Dashboard created successfully.", "success");
     } else {
-      alert("Error: " + response.data.errors.join(", "));
+      useToast("Error: " + response.data.errors.join(", "), "error");
     }
   } catch (error) {
     console.error("Error during dashboard creation:", error);
     if (axios.isAxiosError(error) && error.response?.data?.errors) {
-      alert("Error: " + error.response.data.errors.join(", "));
+      useToast("Error: " + error.response.data.errors.join(", "), "error");
     } else {
-      alert("An error occurred while creating the dashboard.");
+      useToast("An error occurred while creating the dashboard.", "error");
     }
   }
 };
@@ -33,14 +35,14 @@ export const updateDashboard = async (
         background_img: backgroundImg,
       },
     });
-
+    useToast("Dashboard name updated successfully!", "success");
     return response.data;
   } catch (error) {
     console.error("Error updating dashboard:", error);
     if (axios.isAxiosError(error) && error.response?.data?.errors) {
-      alert("Error: " + error.response.data.errors.join(", "));
+      useToast("Error: " + error.response.data.errors.join(", "), "error");
     } else {
-      alert("An error occurred while updating the dashboard.");
+      useToast("An error occurred while updating the dashboard.", "error");
     }
     throw error;
   }
@@ -50,13 +52,14 @@ export const deleteDashboard = async (id: string) => {
   try {
     const response = await axios.delete(`/api/dashboards/${id}`);
     window.location.href = `/`;
+    useToast("Dashboard deleted successfully!", "success");
     return response.data;
   } catch (error) {
     console.error("Error deleting dashboard:", error);
     if (axios.isAxiosError(error) && error.response?.data?.error) {
-      alert("Error: " + error.response.data.error);
+      useToast("Error: " + error.response.data.error, "error");
     } else {
-      alert("An error occurred while deleting the dashboard.");
+      useToast("An error occurred while deleting the dashboard.", "error");
     }
     throw error;
   }
@@ -70,13 +73,14 @@ export const removeDashboardMember = async (
     const response = await axios.delete(
       `/api/dashboards/${dashboardId}/members/${membersId}`
     );
+    useToast("Member removed from dashboard.", "success");
     return response.data;
   } catch (error) {
     console.error("Error removing dashboard member:", error);
     if (axios.isAxiosError(error) && error.response?.data?.error) {
-      alert("Error: " + error.response.data.error);
+      useToast("Error: " + error.response.data.error, "error");
     } else {
-      alert("An error occurred while removing the member.");
+      useToast("An error occurred while removing the member.", "error");
     }
     throw error;
   }
@@ -96,16 +100,20 @@ export const createDashboardFromTemplate = async (
 
     if (response.data.id) {
       window.location.href = `/dashboard/${response.data.id}`;
+      useToast("Dashboard created from template successfully.", "success");
     } else {
-      alert("Error: " + response.data.errors.join(", "));
+      useToast("Error: " + response.data.errors.join(", "), "error");
     }
     return response.data;
   } catch (error) {
     console.error("Error creating dashboard from template:", error);
     if (axios.isAxiosError(error) && error.response?.data?.errors) {
-      alert("Error: " + error.response.data.errors.join(", "));
+      useToast("Error: " + error.response.data.errors.join(", "), "error");
     } else {
-      alert("An error occurred while creating dashboard from template.");
+      useToast(
+        "An error occurred while creating dashboard from template.",
+        "error"
+      );
     }
     throw error;
   }

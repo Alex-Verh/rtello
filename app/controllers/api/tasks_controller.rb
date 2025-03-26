@@ -71,6 +71,8 @@ class Api::TasksController < ApplicationController
       task = Task.find_by(id: params[:id])
       return render json: { error: "Task not found" }, status: :not_found if task.nil?
       list_id = task.list_id
+    elsif params[:tasks] && action_name == "reorder"
+      list_id = params[:tasks].first[:list_id]
     else
       list_id = params[:task][:list_id]
     end
