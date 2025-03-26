@@ -1,14 +1,6 @@
 class Api::DashboardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_leader [only :show, :destroy, :update]
-  before_action :authorize_member [only :show]
-
-  def show
-    dashboard = Dashboard.find(params[:id])
-    render json: dashboard
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Dashboard not found" }, status: :not_found
-  end
+  before_action :authorize_leader, only: [ :destroy, :update ]
 
   def create
     # create container first
@@ -18,10 +10,50 @@ class Api::DashboardsController < ApplicationController
         container_type: :dashboard,
         user_id: current_user.id
       )
-      dashboard = container.build_dashboard(dashboard_params)
+      dashboard = container.create_dashboard!(dashboard_params)
       dashboard.save!
       render json: dashboard, status: :created
     end
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def create_from_template
+    template = Template.find(params[:template_id])
+
+    ActiveRecord::Base.transaction do
+      # create container
+      container = Container.create!(
+        name: params[:name],
+        container_type: :dashboard,
+        user_id: current_user.id
+      )
+      # create dashboard
+      dashboard = container.create_dashboard!(
+        background_img: template.background_img,
+      )
+
+    # copy all lists
+    template.lists.each do |template_list|
+      new_list = container.lists.create!(
+        name: template_list.title,
+        position: template_list.position,
+      )
+
+      # copy all tasks for each list
+      template_list.tasks.each do |template_task|
+        new_list.tasks.create!(
+          description: template_task.description,
+          position: template_task.position,
+        )
+        template_task.dashboard_task.create # besides regular task create dashboard task
+      end
+    end
+
+      render json: dashboard, status: :created
+    end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Template not found" }, status: :not_found
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
   end
@@ -62,9 +94,9 @@ class Api::DashboardsController < ApplicationController
     return render json: { error: "Member not found" }, status: :not_found if member.nil?
 
     # if a leader or user themselves
-    if current_user.id == member.member_id || current_user.id == dashboard.container.user_id
+    if current_user.id == member.user_id || current_user.id == dashboard.container.user_id
       member.destroy
-      message = current_user.id == member.member_id ? "You have left the dashboard" : "Member removed by leader"
+      message = current_user.id == member.user_id ? "You have left the dashboard" : "Member removed by leader"
       render json: { success: true, message: message }
     else
       render json: { error: "Unauthorized: You cannot remove other members unless you are a leader." }, status: :forbidden
@@ -76,7 +108,7 @@ class Api::DashboardsController < ApplicationController
   private
 
   # Check if user is leader of dashboard
-  def authorize_user
+  def authorize_leader
     dashboard = Dashboard.find_by(id: params[:id])
     return render json: { error: "Dashboard not found" }, status: :not_found if dashboard.nil?
 
@@ -85,17 +117,7 @@ class Api::DashboardsController < ApplicationController
     end
   end
 
-  # Check if user is member of dashboard
-  def authorize_member
-    dashboard = Dashboard.find_by(id: params[:id])
-    return render json: { error: "Dashboard not found" }, status: :not_found if dashboard.nil?
-
-    unless dashboard.members.exists?(member_id: current_user.id)
-      render json: { error: "Unauthorized: You must be a member of this dashboard" }, status: :forbidden
-    end
-  end
-
   def dashboard_params
-    params.require(:dashboard).permit(:background_img)
+    params.fetch(:dashboard, {}).permit(:background_img)
   end
 end

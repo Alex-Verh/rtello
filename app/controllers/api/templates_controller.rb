@@ -1,12 +1,15 @@
 class Api::TemplatesController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_leader [only :destroy, :update]
+  before_action :authorize_leader, only: [ :destroy, :update ]
 
-  def show
-    template = Template.find(params[:id])
-    render json: template
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Template not found" }, status: :not_found
+
+  def search
+    query = params[:query]
+    templates = Template.joins(:container)
+    .where("containers.name ILIKE ?", "%#{query}%")
+    .where(containers: { user_id: current_user.id })
+    .limit(10)
+    render json: templates
   end
 
   def create
@@ -17,7 +20,7 @@ class Api::TemplatesController < ApplicationController
         container_type: :template,
         user_id: current_user.id
       )
-      template = container.build_template(template_params.merge(usage_count: 0)) # when creating it, usage count is 0
+      template = container.create_template!(template_params.merge(usage_count: 0)) # when creating it, usage count is 0
       template.save!
       render json: template, status: :created
     end
@@ -58,7 +61,7 @@ class Api::TemplatesController < ApplicationController
   private
 
   # Check if user is leader of template
-  def template_user
+  def authorize_leader
     template = Template.find_by(id: params[:id])
     return render json: { error: "Template not found" }, status: :not_found if template.nil?
 
@@ -69,6 +72,6 @@ class Api::TemplatesController < ApplicationController
 
 
   def template_params
-    params.require(:template).permit()
+    params.fetch(:template, {}).permit()
   end
 end

@@ -18,14 +18,25 @@
         %span.text-gray-500 No templates.
 
     %div.home-main__label.flex.items-center
-      = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")
+      = image_tag("dashboards.svg", alt: "Templates", class: "home-main__label__icon")
       %span Your Templates
+      %button.button.cursor-pointer{id: "create-template", data_modal: "template-modal"} Create
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @own_templates.any?
         - @own_templates.each do |template|
           = link_to template.container.name, template_path(template.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer"
       - else
         %span.text-gray-500 No templates.
+
+    = render "shared/modal", id: "template-modal" do
+      %div.register__title Create Template
+      = form_with url: "/api/templates", :method => :post, id: "template-form" do |f|
+        .field
+          = f.label :name, "Template Name", class: "field__label"
+          = f.text_field :name, class: "field__input"
+        .actions
+          = f.submit "Create Template", class: "button cursor-pointer"
+
 
     %div.home-main__label.flex.items-center
       = image_tag("dashboards.svg", alt: "Dashboards", class: "home-main__label__icon")

@@ -3,23 +3,23 @@
   = stylesheet_link_tag 'pages/dashboard'
 
 %div.grid.text-white{ style: "grid-template-columns: auto 1fr;  height: calc(100vh - 50px);" }
-  
-  = render "shared/sidebar", dashboard: @dashboard
+
+  = render "shared/sidebar", container: @dashboard
  
   %section.dashboard.overflow-x-auto
-    %div.flex.flex-nowrap#lists-container
-      - 5.times do |i|
-        %div.dashboard__list.flex-shrink-0.flex.flex-col.cursor-grab{ data: { list_id: i } }
+    %div.flex.flex-nowrap#lists-container{data: {data_container_id: @dashboard.container.id}}
+      - @dashboard.container.lists.sort_by(&:position).each do |list|
+        %div.dashboard__list.flex-shrink-0.flex.flex-col.cursor-grab{ data: { list_id: list.position } }
           %div.dashboard__list__header.flex.items-center.justify-between
-            %div.dashboard__list__title List Name
+            %div.dashboard__list__title= list.name
             %button
               = image_tag("trash.svg", alt: "Delete", class: "cursor-pointer dashboard__list__icon")
 
-          %div.dashboard__list__tasks.overflow-y-scroll{ data: { list_id: i } }
-            - 7.times do |j|
-              %div.dashboard__task.flex.items-center.cursor-grab{ data: { task_id: j } }
+          %div.dashboard__list__tasks.overflow-y-scroll{ data: { list_id: list.position } }
+            - list.tasks.sort_by(&:position).each do |task|
+              %div.dashboard__task.flex.items-center.cursor-grab{ data: { task_id: task.position }, class: "#{' dashboard__task_active' if task.dashboard_task.completed?}" }
                 %button.dashboard__task__complete.cursor-pointer
-                %span Fix: Change paragraphs that are "Ads/Trying to Sell" to a more formal report text.
+                %span= task.description
                 %button.dashboard__task__icon
                   = image_tag("cross.svg", alt: "Delete", class: "cursor-pointer ")
           
@@ -28,16 +28,16 @@
             %button.cursor-pointer Add new task
 
       -# Add new list btn
-      %div.dashboard__list__add.flex.items-center{id: "createList", data_modal: "listModal"}
+      %div.dashboard__list__add.flex.items-center{id: "create-list", data_modal: "list-modal"}
         = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
         %button.cursor-pointer Add new list
 
       -# Modal to create new list
-      = render "shared/modal", id: "listModal" do
+      = render "shared/modal", id: "list-modal" do
         %div.register__title Create New List
-        = form_with url: "/submit-form", local: true do |f|
+        = form_with url: "/api/lists", :method => :post, id: "list-form" do |f|          
           .field
-            = f.label :title, "List Name", class: "field__label"
-            = f.text_field :title, class: "field__input"
+            = f.label :name, "List Name", class: "field__label"
+            = f.text_field :name, class: "field__input"
           .actions
             = f.submit "Create List", class: "button cursor-pointer"

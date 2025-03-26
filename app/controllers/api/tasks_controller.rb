@@ -2,16 +2,13 @@ class Api::TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_user
 
-  def show
-    task = Task.find(params[:id])
-    render json: task
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Task not found" }, status: :not_found
-  end
 
   def create
-    task = Task.new(task_params)
+    # get max position
     list = List.find(params[:list_id])
+    max_position = list.tasks.maximum(:position) || 0
+
+    task = Task.new(task_params.merge(position: max_position + 1))
     if task.save
       DashboardTask.create(task: task) if list.container.dashboard?
       render json: task, status: :created
@@ -92,7 +89,7 @@ class Api::TasksController < ApplicationController
         render json: { error: "Unauthorized: Only the leader can manage this template" }, status: :forbidden
       end
     when :dashboard
-      unless container.container.user_id == current_user.id || container.members.exists?(member_id: current_user.id)
+      unless container.container.user_id == current_user.id || container.members.exists?(user_id: current_user.id)
         render json: { error: "Unauthorized: You must be the leader or a member of this dashboard" }, status: :forbidden
       end
     end

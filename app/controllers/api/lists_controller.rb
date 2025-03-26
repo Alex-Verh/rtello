@@ -2,15 +2,12 @@ class Api::ListsController < ApplicationController
   before_action :authenticate_user!
   before_action :authorize_user
 
-  def show
-    list = List.find(params[:id])
-    render json: list
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "List not found" }, status: :not_found
-  end
-
   def create
-    list = List.new(list_params)
+    # get max position
+    container = Container.find(params[:list][:container_id])
+    max_position = container.lists.maximum(:position) || 0
+
+    list = List.new(list_params.merge(position: max_position + 1))
     if list.save
       render json: list, status: :created
     else
@@ -19,7 +16,7 @@ class Api::ListsController < ApplicationController
   end
 
   def destroy
-    list = List.find(params[:id])
+    list = List.find(params[:list][:id])
     list.destroy
     render json: { success: true, message: "List deleted" }, status: :ok
   rescue ActiveRecord::RecordNotFound
@@ -27,7 +24,7 @@ class Api::ListsController < ApplicationController
   end
 
   def update
-    list = List.find(params[:id])
+    list = List.find(params[:list][:id])
     if list.update(list_params)
       render json: list
     else
@@ -50,19 +47,25 @@ class Api::ListsController < ApplicationController
 
   # Check if user can manage this list
   def authorize_user
-    list = List.find_by(id: params[:id])
-    return render json: { error: "List not found" }, status: :not_found if list.nil?
+    # if the list already exists retrieve it, but if not try to find container by container_id
+    if params[:list][:id] && action_name != "create"
+      list = List.find_by(id: params[:list][:id])
+      return render json: { error: "List not found" }, status: :not_found if list.nil?
+      container_id = list.container_id
+    else
+      container_id = params[:list][:container_id]
+    end
 
-    container = Container.find_by(id: list.container_id)
+    container = Container.find_by(id: container_id)
     return render json: { error: "Container not found" }, status: :not_found if container.nil?
 
-    case container.container_type # switch case when template check only if leader when dashboard if leader or member
+    case container.container_type # switch case when template check only if creator when dashboard if leader or member
     when :template
       unless container.container.user_id == current_user.id
-        render json: { error: "Unauthorized: Only the leader can manage this template" }, status: :forbidden
+        render json: { error: "Unauthorized: Only the creator can manage this template" }, status: :forbidden
       end
     when :dashboard
-      unless container.container.user_id == current_user.id || container.members.exists?(member_id: current_user.id)
+      unless container.container.user_id == current_user.id || container.members.exists?(user_id: current_user.id)
         render json: { error: "Unauthorized: You must be the leader or a member of this dashboard" }, status: :forbidden
       end
     end

@@ -16,7 +16,7 @@ class HomeController < ApplicationController
 
     @popular_templates = Template.includes(:container)
     .group("templates.id")
-    .order("COUNT(usages.id) DESC")
+    .order("COUNT(usage_count) DESC")
     .limit(4)
   end
 end

@@ -1,41 +1,48 @@
 import "../../assets/stylesheets/dashboard.scss";
 import { enableModal, enableSidebar } from "../functions/modal";
-import Sortable, { MoveEvent } from "sortablejs";
+import { enableSortable } from "../functions/sort";
+import { createList } from "../api/lists";
+import { listHTML } from "../dom";
+import { ListResponse } from "../interfaces";
+import axios from "axios";
 
 document.addEventListener("turbo:load", () => {
-  enableModal("createList");
-  enableSidebar();
+  const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    ?.getAttribute("content");
 
-  const listsContainer = document.getElementById("lists-container");
-  if (listsContainer) {
-    new Sortable(listsContainer, {
-      animation: 150,
-      ghostClass: "sortable-ghost",
-      draggable: ".dashboard__list",
-      onEnd: (evt: MoveEvent) => {
-        console.log("List moved:", evt.oldIndex, "→", evt.newIndex);
-        // update list order
-      },
-    });
+  if (csrfToken) {
+    axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
   }
 
-  // Enable sorting within each list & allow moving tasks between lists
-  document.querySelectorAll(".dashboard__list__tasks").forEach((taskList) => {
-    new Sortable(taskList as HTMLElement, {
-      group: "tasks",
-      animation: 150,
-      ghostClass: "sortable-ghost",
-      draggable: ".dashboard__task",
-      onEnd: (evt: MoveEvent) => {
-        console.log("Task moved:", evt.oldIndex, "→", evt.newIndex);
-        console.log(
-          "From List:",
-          evt.from.dataset.listId,
-          "To List:",
-          evt.to.dataset.listId
-        );
-        // update task order
-      },
-    });
+  enableModal("create-list");
+  enableSidebar();
+  enableSortable(); // enable sorting of lists and tasks
+
+  const container = document.querySelector("#lists-container") as HTMLElement;
+  if (container == null) return;
+
+  const containerId = container.dataset?.dataContainerId;
+  if (containerId == null) return;
+
+  // create list button
+  const form = container.querySelector("#list-form") as HTMLFormElement;
+  if (form == null) return;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+    const name = formData.get("name") as string;
+    const data = (await createList(containerId, name)) as ListResponse;
+
+    if (!data) return;
+
+    form.reset(); // reset form
+    container.querySelector("#list-modal")?.classList.add("hidden"); // hide modal
+
+    const addButton = container.querySelector("#create-list");
+
+    container.insertBefore(listHTML(data.name, data.position), addButton);
   });
 });

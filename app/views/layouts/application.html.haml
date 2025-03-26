@@ -18,9 +18,9 @@
       = link_to "Rtello", root_path, class: "navigation__logo font-bold cursor-pointer"
       - if user_signed_in?
         %div.navigation__btn.flex.items-center
-          %button.cursor-pointer{id: "seeDashboards", data_modal: "dashboardsPopup"} Dasboards
+          %button.cursor-pointer{id: "see-dashboards", data_modal: "dashboards-popup"} Dasboards
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
-          %div.navigation__dropdown.hidden{id: "dashboardsPopup"}
+          %div.navigation__dropdown.hidden{id: "dashboards-popup"}
             - if @all_dashboards.any?
               - @all_dashboards.each do |dashboard|
                 %div.workspace.navigation__dropdown__item.flex.items-center
@@ -31,9 +31,9 @@
               %span.text-gray-500 No dashboards.
 
         %div.navigation__btn.flex.items-center
-          %button.cursor-pointer{id: "seeRecents", data_modal: "recentsPopup"} Recent
+          %button.cursor-pointer{id: "see-recents", data_modal: "recents-popup"} Recent
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
-          %div.navigation__dropdown.hidden{id: "recentsPopup"}
+          %div.navigation__dropdown.hidden{id: "recents-popup"}
             - 3.times do |i|
               %div.workspace.navigation__dropdown__item.flex.items-center
                 %div.workspace__icon.cursor-pointer.flex.items-center.justify-center D
@@ -41,9 +41,9 @@
               %div.workspace.navigation__dropdown__line
 
         %div.navigation__btn.flex.items-center
-          %button.cursor-pointer{id: "seeTemplates", data_modal: "templatesPopup"} Templates
+          %button.cursor-pointer{id: "see-templates", data_modal: "templates-popup"} Templates
           = image_tag("arrow.svg", alt: "▾", class: "navigation__btn_icon cursor-pointer")
-          %div.navigation__dropdown.hidden{id: "templatesPopup"}
+          %div.navigation__dropdown.hidden{id: "templates-popup"}
             - if @all_templates.any?
               - @all_templates.each do |template|
                 %div.workspace.navigation__dropdown__item.flex.items-center
@@ -53,14 +53,14 @@
             - else 
               %span.text-gray-500 No templates.
 
-        %button.button.text-white.cursor-pointer{id: "createDashboard", data_modal: "dashboardModal"} Create
+        %button.button.text-white.cursor-pointer{id: "create-dashboard", data_modal: "dashboard-modal"} Create
         
-        = render "shared/modal", id: "dashboardModal" do
+        = render "shared/modal", id: "dashboard-modal" do
           %div.register__title Create Blank Dashboard
-          = form_with url: "/submit-form", local: true do |f|
+          = form_with url: "/api/dashboards", :method => :post, id: "dashboard-form" do |f|
             .field
-              = f.label :title, "Dashboard Name", class: "field__label"
-              = f.text_field :title, class: "field__input"
+              = f.label :name, "Dashboard Name", class: "field__label"
+              = f.text_field :name, class: "field__input"
             .actions
               = f.submit "Create Blank", class: "button cursor-pointer"
 

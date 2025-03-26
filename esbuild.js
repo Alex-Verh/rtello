@@ -10,6 +10,7 @@ const sassPlugin = require("esbuild-sass-plugin");
     plugins: [sassPlugin.sassPlugin()],
     loader: {
       ".css": "css",
+      ".svg": "file",
     },
     external: ["*.woff", "*.woff2"],
   });
