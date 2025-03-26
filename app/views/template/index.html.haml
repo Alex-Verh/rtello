@@ -1,43 +1,10 @@
-= javascript_include_tag "pages/template", type: "module", "data-turbolinks-track": "reload"
+= javascript_include_tag "pages/dashboard", type: "module", "data-turbolinks-track": "reload"
 - content_for :stylesheets do
   = stylesheet_link_tag 'pages/dashboard'
 
 %div.grid.text-white{ style: "grid-template-columns: auto 1fr;  height: calc(100vh - 50px);" }
   
   = render "shared/sidebar", container: @template
+  = render "shared/workspace", container: @template.container
+
  
-  %section.dashboard.overflow-x-auto
-    %div.flex.flex-nowrap#lists-container
-      - @template.container.lists.sort_by(&:position).each do |list|
-        %div.dashboard__list.flex-shrink-0.flex.flex-col.cursor-grab{ data: { list_id: list.position } }
-          %div.dashboard__list__header.flex.items-center.justify-between
-            %div.dashboard__list__title= list.name
-            %button
-              = image_tag("trash.svg", alt: "Delete", class: "cursor-pointer dashboard__list__icon")
-
-          %div.dashboard__list__tasks.overflow-y-scroll{ data: { list_id: list.position } }
-              - list.tasks.sort_by(&:position).each do |task|
-              %div.dashboard__task.flex.items-center.cursor-grab{ data: { task_id: task.position } }
-                %span Fix: Change paragraphs that are "Ads/Trying to Sell" to a more formal report text.
-                %button.dashboard__task__icon
-                  = image_tag("cross.svg", alt: "Delete", class: "cursor-pointer ")
-          
-          %div.dashboard__list__add.flex.items-center{id: "createList", data_modal: "listModal"}
-            = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
-            %button.cursor-pointer Add new task
-
-
-      -# Add new list btn
-      %div.dashboard__list__add.flex.items-center{id: "create-list", data_modal: "list-modal"}
-        = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
-        %button.cursor-pointer Add new list
-
-      -# Modal to create new list
-      = render "shared/modal", id: "list-modal" do
-        %div.register__title Create New List
-        = form_with url: "/api/lists", :method => :post, id: "list-form" do |f|          
-          .field
-            = f.label :name, "List Name", class: "field__label"
-            = f.text_field :name, class: "field__input"
-          .actions
-            = f.submit "Create List", class: "button cursor-pointer"

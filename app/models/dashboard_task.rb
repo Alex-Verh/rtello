@@ -17,4 +17,8 @@ class DashboardTask < ApplicationRecord
       transitions from: :completed, to: :not_completed
     end
   end
+
+  def toggle_state!
+    completed? ? incomplete! : complete!
+  end
 end

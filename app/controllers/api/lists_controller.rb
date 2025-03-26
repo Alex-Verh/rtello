@@ -16,7 +16,7 @@ class Api::ListsController < ApplicationController
   end
 
   def destroy
-    list = List.find(params[:list][:id])
+    list = List.find(params[:id])
     list.destroy
     render json: { success: true, message: "List deleted" }, status: :ok
   rescue ActiveRecord::RecordNotFound
@@ -24,7 +24,7 @@ class Api::ListsController < ApplicationController
   end
 
   def update
-    list = List.find(params[:list][:id])
+    list = List.find(params[:id])
     if list.update(list_params)
       render json: list
     else
@@ -48,8 +48,8 @@ class Api::ListsController < ApplicationController
   # Check if user can manage this list
   def authorize_user
     # if the list already exists retrieve it, but if not try to find container by container_id
-    if params[:list][:id] && action_name != "create"
-      list = List.find_by(id: params[:list][:id])
+    if params[:id] && action_name != "create"
+      list = List.find_by(id: params[:id])
       return render json: { error: "List not found" }, status: :not_found if list.nil?
       container_id = list.container_id
     else

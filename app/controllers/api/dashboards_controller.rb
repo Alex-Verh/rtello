@@ -19,7 +19,8 @@ class Api::DashboardsController < ApplicationController
   end
 
   def create_from_template
-    template = Template.find(params[:template_id])
+    print(params)
+    templateContainer = Container.find(params[:template_id])
 
     ActiveRecord::Base.transaction do
       # create container
@@ -29,14 +30,12 @@ class Api::DashboardsController < ApplicationController
         user_id: current_user.id
       )
       # create dashboard
-      dashboard = container.create_dashboard!(
-        background_img: template.background_img,
-      )
+      dashboard = container.create_dashboard!(dashboard_params)
 
     # copy all lists
-    template.lists.each do |template_list|
+    templateContainer.lists.each do |template_list|
       new_list = container.lists.create!(
-        name: template_list.title,
+        name: template_list.name,
         position: template_list.position,
       )
 
@@ -46,7 +45,7 @@ class Api::DashboardsController < ApplicationController
           description: template_task.description,
           position: template_task.position,
         )
-        template_task.dashboard_task.create # besides regular task create dashboard task
+        DashboardTask.create(task: template_task) # besides regular task create dashboard task
       end
     end
 

@@ -49,6 +49,7 @@ export const updateDashboard = async (
 export const deleteDashboard = async (id: string) => {
   try {
     const response = await axios.delete(`/api/dashboards/${id}`);
+    window.location.href = `/`;
     return response.data;
   } catch (error) {
     console.error("Error deleting dashboard:", error);

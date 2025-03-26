@@ -147,16 +147,16 @@
       margin-inline-end: 10px;
     }
 
-    &__icon {
+    &__delete {
       position: absolute;
       top: 5px;
       right: 5px;
+    }
 
-      img {
-        height: 10px;
-        width: 10px;
-        aspect-ratio: 1;
-      }
+    &__icon {
+      height: 10px;
+      width: 10px;
+      aspect-ratio: 1;
     }
 
     &_active {

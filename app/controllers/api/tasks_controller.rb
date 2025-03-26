@@ -5,7 +5,7 @@ class Api::TasksController < ApplicationController
 
   def create
     # get max position
-    list = List.find(params[:list_id])
+    list = List.find(params[:task][:list_id])
     max_position = list.tasks.maximum(:position) || 0
 
     task = Task.new(task_params.merge(position: max_position + 1))
@@ -45,15 +45,7 @@ class Api::TasksController < ApplicationController
       return
     end
 
-    case params[:state]
-    when "completed"
-      dashboard_task.complete! unless dashboard_task.completed?
-    when "not_completed"
-      dashboard_task.incomplete! unless dashboard_task.not_completed?
-    else
-      render json: { error: "Invalid state transition" }, status: :unprocessable_entity
-      return
-    end
+    dashboard_task.toggle_state!
 
     render json: { success: true, task: task, dashboard_task: dashboard_task }
   rescue ActiveRecord::RecordNotFound
@@ -74,10 +66,16 @@ class Api::TasksController < ApplicationController
 
   # Check if user can manage this task
   def authorize_user
-    task = Task.find_by(id: params[:id])
-    return render json: { error: "Task not found" }, status: :not_found if task.nil?
+    # if the task already exists retrieve it, but if not try to find list by list_id
+    if params[:id] && action_name != "create"
+      task = Task.find_by(id: params[:id])
+      return render json: { error: "Task not found" }, status: :not_found if task.nil?
+      list_id = task.list_id
+    else
+      list_id = params[:task][:list_id]
+    end
 
-    list = List.find_by(id: params[:list_id])
+    list = List.find_by(id: list_id)
     return render json: { error: "List not found" }, status: :not_found if list.nil?
 
     container = Container.find_by(id: list.container_id)

@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus";
-import { enableModal } from "../functions/modal";
+import { enablePopup, openModal } from "../functions/modal";
 import { createDashboard } from "../api/dashboards";
 import axios from "axios";
 
@@ -22,23 +22,30 @@ document.addEventListener("turbo:load", () => {
   }
 
   if (isAuthenticated) {
-    enableModal("create-dashboard"); // modal
-    enableModal("see-dashboards", true); // navbar popup
-    enableModal("see-recents", true); // navbar popup
-    enableModal("see-templates", true); // navbar popup
+    enablePopup("see-dashboards"); // navbar popup
+    enablePopup("see-recents"); // navbar popup
+    enablePopup("see-templates"); // navbar popup
 
-    // create dashboard button
-    const form = document.getElementById("dashboard-form") as HTMLFormElement;
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const formData = new FormData(form);
-      const name = formData.get("name") as string;
-      createDashboard(name);
-    });
+    // create dashboard
+    const createBtn = document.querySelector(
+      "#create-dashboard"
+    ) as HTMLElement;
+    if (createBtn) {
+      createBtn.addEventListener("click", () => {
+        openModal(
+          "Create Blank Dashboard",
+          "Dashboard Name",
+          "name",
+          "Create",
+          async (name) => {
+            const data = await createDashboard(name);
+          }
+        );
+      });
+    }
   }
 
-  enableModal("seeAccount", true); // navbar popup
+  enablePopup("seeAccount"); // navbar popup
 });
 
 export { application };

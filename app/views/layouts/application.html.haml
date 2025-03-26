@@ -13,6 +13,16 @@
     %meta{name: "current-user", content: "#{current_user.present?}"}  
 
   %body.h-screen
+    -# Dynamic modal
+    = render "shared/modal", id: "modal" do
+      %div.register__title#modal-title
+      = form_with url: "", id: "modal-form", :method => :post do |f|        
+        .field
+          = f.label :modal_input, class: "field__label", id: "modal-label"
+          = f.text_field :modal_input, class: "field__input", id: "modal-input"
+        .actions
+          = f.submit class: "button cursor-pointer", id: "modal-button"
+
     -# NAV BAR
     %nav.navigation.text-white.flex.items-center
       = link_to "Rtello", root_path, class: "navigation__logo font-bold cursor-pointer"
@@ -54,15 +64,6 @@
               %span.text-gray-500 No templates.
 
         %button.button.text-white.cursor-pointer{id: "create-dashboard", data_modal: "dashboard-modal"} Create
-        
-        = render "shared/modal", id: "dashboard-modal" do
-          %div.register__title Create Blank Dashboard
-          = form_with url: "/api/dashboards", :method => :post, id: "dashboard-form" do |f|
-            .field
-              = f.label :name, "Dashboard Name", class: "field__label"
-              = f.text_field :name, class: "field__input"
-            .actions
-              = f.submit "Create Blank", class: "button cursor-pointer"
 
       %div.navigation__account.flex.items-center
         %div.navigation__account_avatar.flex.items-center.justify-center.cursor-pointer AV

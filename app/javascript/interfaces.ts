@@ -6,3 +6,12 @@ export interface ListResponse {
   created_at: string;
   update_at: string;
 }
+
+export interface TaskResponse {
+  id: number;
+  list_id: number;
+  description: string;
+  position: number;
+  created_at: string;
+  update_at: string;
+}

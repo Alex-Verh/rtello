@@ -6,10 +6,10 @@
         %button.sidebar__toggle
             = image_tag("arrow.svg", alt: "▸", class: "cursor-pointer")
 
-    - if container == @dashboard
+    - if container.container.container_type.to_sym == :dashboard
         %div.sidebar__label Members
-        - if @dashboard.members.any?
-            - @dashboard.members.each do |member|
+        - if container.members.any?
+            - container.members.each do |member|
                 %div.sidebar__member.flex.items-center.justify-between
                     %div.sidebar__member__account.flex.items-center.cursor-pointer
                         = image_tag("account.svg", alt: "Account:", class: "sidebar__member__icon")
@@ -23,25 +23,25 @@
     - if @is_owner
         %div.sidebar__btn.flex.items-center
             = image_tag("label.svg", alt: "Modify", class: "sidebar__btn__icon cursor-pointer")
-            %button.cursor-pointer Change Name
+            %button.cursor-pointer#rename-container Change Name
         
-        - if container == @dashboard
+        - if container.container.container_type.to_sym == :dashboard
             %div.sidebar__btn.flex.items-center
                 = image_tag("plus.svg", alt: "Add", class: "sidebar__btn__icon cursor-pointer")
-                %button.cursor-pointer Add New Member
+                %button.cursor-pointer Invite New Member
     
         %div.sidebar__btn.sidebar__btn_delete.flex.items-center
             = image_tag("trash.svg", alt: "Delete", class: "sidebar__btn__icon cursor-pointer")
-            %button.cursor-pointer Delete Dashboard
+            %button.cursor-pointer#delete-container Delete Dashboard
     - else 
         %div.sidebar__btn.flex.items-center
             = image_tag("leave.svg", alt: "Leave", class: "sidebar__btn__icon cursor-pointer")
             %button.cursor-pointer Leave Dashboard
 
-    - if container == @template
+    - if container.container.container_type.to_sym == :template
         %div.sidebar__btn.flex.items-center
             = image_tag("plus.svg", alt: "Add", class: "sidebar__btn__icon cursor-pointer")
-            %button.cursor-pointer Create Dasboard From
+            %button.cursor-pointer#create-from Create Dasboard From
 
     %div.sidebar__label All Dashboards
     - if @all_dashboards.any?

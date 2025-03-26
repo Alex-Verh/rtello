@@ -10,9 +10,7 @@
 //= link pages/dashboard.css
 //= link pages/dashboard.js
 
-// Template Page - uses same css as dashboard page
-//= link pages/template.js
-
+// Tailwind
 //= link tailwind.css
 
 // Images
