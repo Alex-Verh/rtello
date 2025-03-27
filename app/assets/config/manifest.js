@@ -1,14 +1,11 @@
 // General Application Files
 //= link application.css
-//= link application.js
 
 // Home Page
-//= link pages/home.css
-//= link pages/home.js
+//= link controllers/home_controller.css
 
 // Dashboard Page
-//= link pages/dashboard.css
-//= link pages/dashboard.js
+//= link controllers/dashboard_controller.css
 
 // Tailwind
 //= link tailwind.css
@@ -24,3 +21,4 @@
 //= link plus.svg
 //= link trash.svg
 //= link leave.svg
+//= link rtello.png

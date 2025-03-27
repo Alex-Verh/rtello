@@ -3,7 +3,10 @@ const sassPlugin = require("esbuild-sass-plugin");
 
 (async () => {
   const ctx = await context({
-    entryPoints: ["app/javascript/application.ts", "app/javascript/pages/*.ts"],
+    entryPoints: [
+      "app/javascript/application.ts",
+      "app/javascript/controllers/*.ts",
+    ],
     bundle: true,
     outdir: "app/assets/builds",
     publicPath: "/assets",

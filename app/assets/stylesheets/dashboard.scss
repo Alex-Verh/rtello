@@ -66,6 +66,17 @@
       height: 16px;
     }
 
+    &:hover {
+      .sidebar__member__remove {
+        opacity: 1;
+      }
+    }
+
+    &__remove {
+      transition: variables.$transition;
+      opacity: 0;
+    }
+
     &__icon {
       margin-inline-end: 10px;
     }
@@ -114,6 +125,17 @@
       aspect-ratio: 1;
     }
 
+    &__delete {
+      transition: variables.$transition;
+      opacity: 0;
+    }
+
+    &:hover {
+      .dashboard__list__delete {
+        opacity: 1;
+      }
+    }
+
     &__add {
       padding: 10px 15px;
       border-radius: 5px;
@@ -151,6 +173,17 @@
       position: absolute;
       top: 5px;
       right: 5px;
+    }
+
+    &__delete {
+      transition: variables.$transition;
+      opacity: 0;
+    }
+
+    &:hover {
+      .dashboard__task__delete {
+        opacity: 1;
+      }
     }
 
     &__icon {

@@ -1,4 +1,4 @@
-%p Rtello - Resend Confirmation!
+%p Rtello - Email Confirmation!
 %p Welcome to Rtello, #{@resource.email}!
-%p= link_to 'Change my password', user_confirmation_url(confirmation_token: @token)
+%p= link_to 'Confirm Email', user_confirmation_url(confirmation_token: @token)
 %p If you didn't request this, please ignore this email.

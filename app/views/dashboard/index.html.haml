@@ -1,9 +1,7 @@
 - content_for :stylesheets do
-  = stylesheet_link_tag 'pages/dashboard'
-- content_for :page_specific_js do 
-  = javascript_include_tag "pages/dashboard", type: "module", "data-turbolinks-track": "reload"
+  = stylesheet_link_tag 'controllers/dashboard_controller'
 
-%div.grid.text-white{ style: "grid-template-columns: auto 1fr;  height: calc(100vh - 50px);" }
+%div.grid.text-white{ style: "grid-template-columns: auto 1fr;  height: calc(100vh - 50px);", data: { controller: "dashboard" } }
 
   = render "shared/sidebar", container: @dashboard
   = render "shared/workspace", container: @dashboard

@@ -6,6 +6,10 @@ class DashboardController < ApplicationController
 
   def index
     @is_owner = @dashboard.container.user_id == current_user.id # check if user is the owner
+
+    unless @is_owner
+      @member_id = @dashboard.members.find_by(user_id: current_user.id)&.id
+    end
   end
 
   private # not accessible via HTTP

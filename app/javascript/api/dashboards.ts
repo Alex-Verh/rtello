@@ -65,6 +65,30 @@ export const deleteDashboard = async (id: string) => {
   }
 };
 
+export const addDashboardMember = async (
+  dashboardId: string,
+  userEmail: string
+) => {
+  try {
+    const response = await axios.post(
+      `/api/dashboards/${dashboardId}/members`,
+      {
+        email: userEmail,
+      }
+    );
+    useToast("Member added to dashboard.", "success");
+    return response.data;
+  } catch (error) {
+    console.error("Error adding dashboard member:", error);
+    if (axios.isAxiosError(error) && error.response?.data?.error) {
+      useToast("Error: " + error.response.data.error, "error");
+    } else {
+      useToast("An error occurred while adding the member.", "error");
+    }
+    throw error;
+  }
+};
+
 export const removeDashboardMember = async (
   dashboardId: string,
   membersId: string
@@ -74,6 +98,10 @@ export const removeDashboardMember = async (
       `/api/dashboards/${dashboardId}/members/${membersId}`
     );
     useToast("Member removed from dashboard.", "success");
+
+    if (response.data.is_self) {
+      window.location.href = `/`;
+    }
     return response.data;
   } catch (error) {
     console.error("Error removing dashboard member:", error);

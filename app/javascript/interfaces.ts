@@ -16,6 +16,15 @@ export interface TaskResponse {
   update_at: string;
 }
 
+export interface MemberResponse {
+  id: number;
+  dashboard_id: number;
+  user_id: number;
+  full_name: string;
+  created_at: string;
+  update_at: string;
+}
+
 export interface TemplateResponse {
   id: number;
   container_id: number;

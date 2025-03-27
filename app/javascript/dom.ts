@@ -1,8 +1,9 @@
+import { wrap } from "module";
+
 const getAssetUrl = (imageName: string) => {
   return `/assets/${imageName}`;
 };
 
-// TODO CHANGE LIST_ID TO POSITION
 export const listHTML = (
   id: number,
   name: string,
@@ -11,6 +12,7 @@ export const listHTML = (
   const wrapper = document.createElement("div");
   wrapper.className = "dashboard__list flex-shrink-0 flex flex-col cursor-grab";
   wrapper.dataset.listPosition = position.toString();
+  wrapper.dataset.listId = id.toString();
   wrapper.id = `list${id}`;
 
   wrapper.innerHTML = `
@@ -23,7 +25,7 @@ export const listHTML = (
             </button>
         </div>
         
-        <div class="dashboard__list__tasks overflow-y-scroll" data-list_id="${position}"></div>
+        <div class="dashboard__list__tasks overflow-y-scroll" id="list-tasks${id}" data-list_id="${position}"></div>
         <div class="dashboard__list__add flex items-center" data-list-id="${id}">
             <img src="${getAssetUrl(
               "plus.svg"
@@ -44,12 +46,13 @@ export const taskHTML = (
   const wrapper = document.createElement("div");
   wrapper.className = "dashboard__task flex items-center cursor-grab";
   wrapper.dataset.taskPosition = position.toString();
+  wrapper.dataset.taskId = id.toString();
   wrapper.id = `task${id}`;
 
   wrapper.innerHTML = `
       ${
         isDashbord
-          ? '<button class="dashboard__task__complete cursor-pointer"></button>'
+          ? `<button class="dashboard__task__complete cursor-pointer" data-task-id="${id}"></button>`
           : ""
       }
       <span>${description}</span>
@@ -71,6 +74,28 @@ export const templateHTML = (id: number, name: string): HTMLElement => {
   wrapper.href = `/template/${id}`;
   wrapper.innerHTML = `${name}`;
   wrapper.style = "background-color: #291b64;";
+
+  return wrapper;
+};
+
+export const memberHTML = (id: number, name: string): HTMLElement => {
+  const wrapper = document.createElement("div");
+
+  wrapper.className = "sidebar__member flex items-center justify-between";
+  wrapper.id = `member#${id}`;
+  wrapper.innerHTML = `
+  <div class="sidebar__member__account flex items-center cursor-pointer">
+    <img src="${getAssetUrl(
+      "account.svg"
+    )}" alt="Account:" class="sidebar__member__icon">
+    <span>${name}</span>
+  </div>
+  <button class="sidebar__member__delete" data-member-id="${id}">
+    <img src="${getAssetUrl(
+      "cross.svg"
+    )}" alt="×" class="cursor-pointer sidebar__member__remove">
+  </button>
+  `;
 
   return wrapper;
 };

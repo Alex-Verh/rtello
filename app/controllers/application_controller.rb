@@ -27,7 +27,10 @@ class ApplicationController < ActionController::Base
     .distinct
 
     last_visited = session[:visited_dashboards] || []
-    recent_dashboards = Dashboard.where(id: last_visited).pluck(:id) # get only non-deleted
+    recent_dashboards = Dashboard
+    .where(id: last_visited) # select non deleted only
+    .where(id: @all_dashboards.select(:id))  # check if user member/leader
+    .pluck(:id)
     session[:visited_dashboards] = recent_dashboards # refresh
     @recent_dashboards = Dashboard.where(id: recent_dashboards)
 

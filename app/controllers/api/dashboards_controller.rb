@@ -1,6 +1,6 @@
 class Api::DashboardsController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_leader, only: [ :destroy, :update ]
+  before_action :authorize_leader, only: [ :destroy, :update, :add_member ]
 
   def create
     # create container first
@@ -19,8 +19,8 @@ class Api::DashboardsController < ApplicationController
   end
 
   def create_from_template
-    print(params)
-    templateContainer = Container.find(params[:template_id])
+    template = Template.find(params[:template_id])
+    templateContainer = template.container
 
     ActiveRecord::Base.transaction do
       # create container
@@ -41,11 +41,11 @@ class Api::DashboardsController < ApplicationController
 
       # copy all tasks for each list
       template_list.tasks.each do |template_task|
-        new_list.tasks.create!(
+        new_task = new_list.tasks.create!(
           description: template_task.description,
-          position: template_task.position,
+          position: template_task.position
         )
-        DashboardTask.create(task: template_task) # besides regular task create dashboard task
+        new_task.create_dashboard_task! # besides regular task create dashboard task
       end
     end
 
@@ -86,17 +86,37 @@ class Api::DashboardsController < ApplicationController
     render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
   end
 
+
+  def add_member
+    dashboard = Dashboard.find(params[:id])
+
+    user = User.find_by(email: params[:email])
+    return render json: { error: "Such user not found" }, status: :not_found if user.nil?
+
+    # Check if the user is already a member or if leader wants to add himself
+    if dashboard.members.exists?(user_id: user.id) || user.id == current_user.id
+      return render json: { error: "User is already a member" }, status: :unprocessable_entity
+    end
+
+    member = dashboard.members.create!(user_id: user.id)
+
+    render json: member.as_json.merge(full_name: user.full_name), status: :created # add full name as well in response
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Dashboard not found" }, status: :not_found
+  end
+
   def delete_member
     dashboard = Dashboard.find(params[:id])
-    member = dashboard.members.find_by(id: params[:member_id])
+    member = dashboard.members.find(params[:member_id])
 
     return render json: { error: "Member not found" }, status: :not_found if member.nil?
 
     # if a leader or user themselves
     if current_user.id == member.user_id || current_user.id == dashboard.container.user_id
       member.destroy
-      message = current_user.id == member.user_id ? "You have left the dashboard" : "Member removed by leader"
-      render json: { success: true, message: message }
+      is_self = current_user.id == member.user_id
+      message = is_self ? "You have left the dashboard" : "Member removed by leader"
+      render json: { success: true, message: message, is_self: is_self }
     else
       render json: { error: "Unauthorized: You cannot remove other members unless you are a leader." }, status: :forbidden
     end
@@ -118,5 +138,9 @@ class Api::DashboardsController < ApplicationController
 
   def dashboard_params
     params.fetch(:dashboard, {}).permit(:background_img)
+  end
+
+  def user_params
+    params.request(:user).permit(:id, :email)
   end
 end

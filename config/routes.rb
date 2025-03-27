@@ -36,6 +36,7 @@ Rails.application.routes.draw do
         post "template/:template_id", action: :create_from_template # create dashboard from other template
       end
       member do
+        post "members", action: :add_member # add member
         delete "members/:member_id", action: :delete_member # delete member
       end
     end

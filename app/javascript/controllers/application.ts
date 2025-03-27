@@ -2,6 +2,7 @@ import { Application } from "@hotwired/stimulus";
 import { enablePopup, openModal } from "../functions/modal";
 import { createDashboard } from "../api/dashboards";
 import axios from "axios";
+import "../../assets/stylesheets/application.scss";
 
 const application = Application.start();
 application.debug = false;
