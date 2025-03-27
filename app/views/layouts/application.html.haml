@@ -7,13 +7,15 @@
     = csp_meta_tag
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" # scss
     = stylesheet_link_tag "tailwind", media: "all", "data-turbolinks-track": "reload" # tailwind
+    = javascript_include_tag "application", "data-turbolinks-track": "reload"
+    = javascript_include_tag "controllers", "data-turbolinks-track": "reload"
     = favicon_link_tag asset_path('rtello.png') # favicon
     = yield :stylesheets # inject page specific stylesheet
 
     -# pass authentication info to TS, because HAML directly rendered by Rails
     %meta{name: "current-user", content: "#{current_user.present?}"}  
 
-  %body.h-screen
+  %body.h-screen{ data: { controller: "application" } }
     -# Dynamic modal
     = render "shared/modal", id: "modal" do
       %div.register__title#modal-title

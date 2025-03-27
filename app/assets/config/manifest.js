@@ -1,5 +1,7 @@
 // General Application Files
 //= link application.css
+//= link application.js
+//= link controllers.js
 
 // Home Page
 //= link controllers/home_controller.css

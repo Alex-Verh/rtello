@@ -21,156 +21,147 @@ import { ListResponse, TaskResponse, MemberResponse } from "../interfaces";
 import axios from "axios";
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller {
-  static targets = ["dashboard"];
-
+export default class DashboardController extends Controller {
   connect() {
-    document.addEventListener("turbo:load", () => {
-      const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        ?.getAttribute("content");
+    const csrfToken = this.getCsrfToken();
 
-      if (csrfToken) {
-        axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
-      }
+    if (csrfToken) {
+      axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
+    }
 
-      enableSidebar();
-      enableSortable(); // enable sorting of lists and tasks
+    enableSidebar();
+    enableSortable();
 
-      const container = document.querySelector(
-        "#lists-container"
-      ) as HTMLElement;
-      if (!container) return;
+    const container = document.querySelector("#lists-container") as HTMLElement;
+    if (!container) return;
 
-      const sidebar = document.querySelector("#sidebar") as HTMLElement;
-      if (!sidebar) return;
+    const sidebar = document.querySelector("#sidebar") as HTMLElement;
+    if (!sidebar) return;
 
-      const dashboardId = container.dataset?.dashboardId as string;
-      const templateId = container.dataset?.templateId as string;
-      const containerId = container.dataset?.containerId as string;
+    const dashboardId = container.dataset?.dashboardId as string | null;
+    const templateId = container.dataset?.templateId as string | null;
+    const containerId = container.dataset?.containerId as string;
 
-      // delete container button
-      const deleteBtn = document.querySelector(
-        "#delete-container"
-      ) as HTMLElement;
-      if (deleteBtn) {
-        deleteBtn.addEventListener("click", () => {
-          if (dashboardId) deleteDashboard(dashboardId);
-          if (templateId) deleteTemplate(templateId);
-        });
-      }
+    this.handleDashboard(dashboardId, templateId);
+    this.handleListCreate(containerId);
+    this.handleDoubleClick();
+    this.handleSingleClick(dashboardId);
+    if (dashboardId) this.handleMember(dashboardId); // handle members only if dashboard
+  }
 
-      // change container name
-      const renameBtn = document.querySelector(
-        "#rename-container"
-      ) as HTMLElement;
-      if (renameBtn) {
-        renameBtn.addEventListener("click", () => {
-          openModal(
-            "Change Name",
-            "Workspace Name",
-            "name",
-            "Change",
-            async (newName) => {
-              if (dashboardId) await updateDashboard(dashboardId, newName);
-              if (templateId) await updateTemplate(templateId, newName);
-              const containerName = document.querySelector(
-                "#container-name"
-              ) as HTMLElement;
-              containerName.textContent = newName;
-            }
-          );
-        });
-      }
+  // get CSRF token
+  getCsrfToken(): string | null | undefined {
+    return document
+      .querySelector('meta[name="csrf-token"]')
+      ?.getAttribute("content");
+  }
 
-      // create dashboard from template
-      const createFrom = document.querySelector("#create-from") as HTMLElement;
-      if (createFrom) {
-        createFrom.addEventListener("click", () => {
-          openModal(
-            "Indicate Dashboard Name",
-            "Dashboard Name",
-            "name",
-            "Create",
-            (name) => {
-              if (templateId) createDashboardFromTemplate(templateId, name);
-            }
-          );
-        });
-      }
+  // handle dashboards/templates actions
+  private handleDashboard(
+    dashboardId: string | null,
+    templateId: string | null
+  ) {
+    // dashboards/templates delete
+    const deleteContainer = document.querySelector(
+      "#delete-container"
+    ) as HTMLElement;
+    deleteContainer?.addEventListener("click", () => {
+      if (dashboardId) deleteDashboard(dashboardId);
+      if (templateId) deleteTemplate(templateId);
+    });
 
-      // create list
-      const createBtn = document.querySelector("#create-list") as HTMLElement;
-      if (createBtn) {
-        createBtn.addEventListener("click", () => {
-          openModal(
-            "Create New List",
-            "List Name",
-            "name",
-            "Create List",
-            async (name) => {
-              const data = (await createList(
-                containerId,
-                name
-              )) as ListResponse;
-              if (!data) return;
+    // dashboards/templates rename
+    const renameContainer = document.querySelector(
+      "#rename-container"
+    ) as HTMLElement;
+    renameContainer?.addEventListener("click", () => {
+      openModal(
+        "Change Name",
+        "Workspace Name",
+        "name",
+        "Change",
+        async (newName: string) => {
+          if (dashboardId) await updateDashboard(dashboardId, newName);
+          if (templateId) await updateTemplate(templateId, newName);
+          const containerName = document.querySelector(
+            "#container-name"
+          ) as HTMLElement;
+          containerName.textContent = newName;
+        }
+      );
+    });
 
-              const addButton = container.querySelector("#create-list");
-              container.insertBefore(
-                listHTML(data.id, data.name, data.position),
-                addButton
-              );
-            }
-          );
-        });
-      }
+    // create dashboard from this template
+    const createFromTemplate = document.querySelector(
+      "#create-from"
+    ) as HTMLElement;
+    createFromTemplate?.addEventListener("click", () => {
+      openModal(
+        "Indicate Dashboard Name",
+        "Dashboard Name",
+        "name",
+        "Create",
+        (name: string) => {
+          if (templateId) createDashboardFromTemplate(templateId, name);
+        }
+      );
+    });
+  }
 
-      // add member
-      const addMember = document.querySelector("#add-member") as HTMLElement;
-      if (addMember) {
-        addMember.addEventListener("click", () => {
-          openModal(
-            "Add Member",
-            "Email Address",
-            "email",
-            "Invite",
-            async (name) => {
-              const data = (await addDashboardMember(
-                dashboardId,
-                name
-              )) as MemberResponse;
-              if (!data) return;
+  handleListCreate(containerId: string) {
+    // lists create
+    const listCreate = document.querySelector("#create-list") as HTMLElement;
+    listCreate.addEventListener("click", () => {
+      openModal(
+        "Create New List",
+        "List Name",
+        "name",
+        "Create List",
+        async (name: string) => {
+          const data = (await createList(containerId, name)) as ListResponse;
+          if (data) {
+            const addButton = document.querySelector("#create-list");
+            const container = document.querySelector(
+              "#lists-container"
+            ) as HTMLElement;
+            container.insertBefore(
+              listHTML(data.id, data.name, data.position),
+              addButton
+            );
+          }
+        }
+      );
+    });
+  }
 
-              const memberContainer =
-                document.querySelector("#members-container");
-              memberContainer?.insertAdjacentElement(
-                "afterend",
-                memberHTML(data.id, data.full_name)
-              );
-            }
-          );
-        });
-      }
-
-      container.addEventListener("dblclick", (e: Event) => {
-        // change list name
+  // handle double clicks in the container
+  private handleDoubleClick() {
+    // create double click listener to rename list / taks
+    document
+      .querySelector("#lists-container")
+      ?.addEventListener("dblclick", (e: Event) => {
+        // if double click on list name
         const listName = (e.target as HTMLElement)?.closest(
           ".dashboard__list__title"
         ) as HTMLElement;
-
         if (listName) {
           const listId = listName.dataset.listId as string;
-          openModal("Change Name", "List Name", "name", "Change", (newName) => {
-            listName.textContent = newName;
-            updateList(listId, newName);
-          });
+          openModal(
+            "Change Name",
+            "List Name",
+            "name",
+            "Change",
+            (newName: string) => {
+              listName.textContent = newName;
+              updateList(listId, newName);
+            }
+          );
         }
 
-        // change task description
+        // if double click on task name
         const taskDescription = (e.target as HTMLElement)?.closest(
           ".dashboard__task__description"
         ) as HTMLElement;
-
         if (taskDescription) {
           const taskId = taskDescription.dataset.taskId as string;
           openModal(
@@ -185,8 +176,13 @@ export default class extends Controller {
           );
         }
       });
+  }
 
-      container.addEventListener("click", (e: Event) => {
+  // handle single clicks in the container
+  private handleSingleClick(dashboardId: string | null) {
+    document
+      .querySelector("#lists-container")
+      ?.addEventListener("click", (e: Event) => {
         // delete list
         const listDelete = (e.target as HTMLElement)?.closest(
           ".dashboard__list__delete"
@@ -195,9 +191,9 @@ export default class extends Controller {
         if (listDelete) {
           const listId = listDelete.dataset.listId as string;
           if (listId) {
-            const listElem = container.querySelector(
-              `#list${listId}`
-            ) as HTMLElement;
+            const listElem = document.querySelector(`
+                #list${listId}
+              `) as HTMLElement;
             deleteList(listId);
             listElem.remove();
           }
@@ -210,7 +206,7 @@ export default class extends Controller {
 
         if (taskBtn) {
           const listId = taskBtn.dataset.listId as string;
-          const listTasks = container.querySelector(
+          const listTasks = document.querySelector(
             `#list-tasks${listId}`
           ) as HTMLElement;
           openModal(
@@ -240,13 +236,13 @@ export default class extends Controller {
 
         // toggle task state
         const taskState = (e.target as HTMLElement)?.closest(
-          ".dashboard__task__complete"
+          ".dashboard__list .dashboard__task__complete"
         ) as HTMLElement;
 
         if (taskState) {
           const taskId = taskState.dataset.taskId as string;
           if (taskId) {
-            const taskElem = container.querySelector(
+            const taskElem = document.querySelector(
               `#task${taskId}`
             ) as HTMLElement;
             updateTaskState(taskId);
@@ -262,25 +258,54 @@ export default class extends Controller {
         if (taskDelete) {
           const taskId = taskDelete.dataset.taskId as string;
           if (taskId) {
-            const taskElem = container.querySelector(
-              `#task${taskId}`
-            ) as HTMLElement;
+            const taskElem = document.querySelector(`
+            #task${taskId}`) as HTMLElement;
             deleteTask(taskId);
             taskElem.remove();
           }
         }
       });
+  }
 
-      sidebar.addEventListener("click", (e: Event) => {
-        // remove member
+  private handleMember(dashboardId: string) {
+    // add member
+    const addMember = document.querySelector("#add-member") as HTMLElement;
+    if (addMember) {
+      addMember.addEventListener("click", () => {
+        openModal(
+          "Add Member",
+          "Email Address",
+          "email",
+          "Invite",
+          async (name) => {
+            const data = (await addDashboardMember(
+              dashboardId,
+              name
+            )) as MemberResponse;
+            if (!data) return;
+
+            const memberContainer =
+              document.querySelector("#members-container");
+            memberContainer?.insertAdjacentElement(
+              "afterend",
+              memberHTML(data.id, data.full_name)
+            );
+          }
+        );
+      });
+    }
+
+    // add listener to sidebar if click on remove member
+    document
+      .querySelector("#sidebar")
+      ?.addEventListener("click", (e: Event) => {
         const memberDelete = (e.target as HTMLElement)?.closest(
           ".sidebar__member__delete"
         ) as HTMLElement;
-
         if (memberDelete) {
           const memberId = memberDelete.dataset.memberId as string;
           if (memberId) {
-            const memberElem = sidebar.querySelector(
+            const memberElem = document.querySelector(
               `#member${memberId}`
             ) as HTMLElement;
             removeDashboardMember(dashboardId, memberId);
@@ -288,6 +313,5 @@ export default class extends Controller {
           }
         }
       });
-    });
   }
 }

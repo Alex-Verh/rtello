@@ -6,70 +6,92 @@ import { templateHTML } from "../dom";
 import { TemplateResponse } from "../interfaces";
 import { Controller } from "@hotwired/stimulus";
 
-export default class extends Controller {
-  static targets = ["home"];
-
+export default class HomeController extends Controller {
   connect() {
-    document.addEventListener("turbo:load", () => {
-      const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        ?.getAttribute("content");
+    const csrfToken = this.getCsrfToken();
 
-      if (csrfToken) {
-        axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
+    if (csrfToken) {
+      axios.defaults.headers.common["X-CSRF-Token"] = csrfToken;
+    }
+
+    this.setupCreateTemplate();
+    this.setupSearchTemplate();
+  }
+
+  // get CSRF token
+  getCsrfToken(): string | null | undefined {
+    return document
+      .querySelector('meta[name="csrf-token"]')
+      ?.getAttribute("content");
+  }
+
+  // create template btn
+  setupCreateTemplate() {
+    const createBtn = document.querySelector("#create-template") as HTMLElement;
+    if (createBtn) {
+      createBtn.addEventListener("click", this.handleCreateTemplate);
+    }
+  }
+
+  // handling click on template btn
+  async handleCreateTemplate() {
+    openModal(
+      "Create New Template",
+      "Template Name",
+      "name",
+      "Create",
+      async (name) => {
+        await createTemplate(name);
       }
+    );
+  }
 
-      // create template
-      const createBtn = document.querySelector(
-        "#create-template"
+  // search template btn
+  setupSearchTemplate() {
+    const searchBtn = document.querySelector(
+      "#search-templates"
+    ) as HTMLElement;
+    if (searchBtn) {
+      const templatesContainer = document.querySelector(
+        "#templates-container"
       ) as HTMLElement;
-      if (createBtn) {
-        createBtn.addEventListener("click", () => {
-          openModal(
-            "Create New Template",
-            "Template Name",
-            "name",
-            "Create",
-            async (name) => {
-              await createTemplate(name);
-            }
-          );
-        });
+      if (!templatesContainer) return;
 
-        // search templates
-        const searchBtn = document.querySelector(
-          "#search-templates"
-        ) as HTMLElement;
-        if (searchBtn) {
-          const templatesContainer = document.querySelector(
-            "#templates-container"
-          ) as HTMLElement;
-          if (!templatesContainer) return;
+      searchBtn.addEventListener("click", () => {
+        this.handleSearchTemplates(templatesContainer);
+      });
+    }
+  }
 
-          searchBtn.addEventListener("click", () => {
-            openModal(
-              "Search Template",
-              "Template Name",
-              "name",
-              "Search",
-              async (name) => {
-                const templates = (await searchTemplates(
-                  name
-                )) as Array<TemplateResponse>;
+  // handling search templates btn
+  async handleSearchTemplates(templatesContainer: HTMLElement) {
+    openModal(
+      "Search Template",
+      "Template Name",
+      "name",
+      "Search",
+      async (name) => {
+        const templates = (await searchTemplates(
+          name
+        )) as Array<TemplateResponse>;
 
-                templatesContainer.innerHTML = "";
-
-                templates.forEach((template: TemplateResponse) => {
-                  templatesContainer.insertAdjacentElement(
-                    "afterbegin",
-                    templateHTML(template.id, template.container.name)
-                  );
-                });
-              }
-            );
-          });
-        }
+        this.updateTemplates(templatesContainer, templates);
       }
+    );
+  }
+
+  // update searched templates
+  updateTemplates(
+    templatesContainer: HTMLElement,
+    templates: Array<TemplateResponse>
+  ) {
+    templatesContainer.innerHTML = "";
+
+    templates.forEach((template: TemplateResponse) => {
+      templatesContainer.insertAdjacentElement(
+        "afterbegin",
+        templateHTML(template.id, template.container.name)
+      );
     });
   }
 }
