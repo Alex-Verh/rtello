@@ -51,8 +51,9 @@ export const openModal = (
   const modalButton = document.querySelector(
     "#modal-button"
   ) as HTMLInputElement;
+
   const modalForm = document.querySelector("#modal-form") as HTMLFormElement;
-  closeModal(modal);
+  closeModal(modal); //enable close
 
   modalTitle.textContent = title;
   modalLabel.textContent = label;

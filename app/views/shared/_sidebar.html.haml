@@ -30,6 +30,12 @@
             %div.sidebar__btn.flex.items-center
                 = image_tag("plus.svg", alt: "Add", class: "sidebar__btn__icon cursor-pointer")
                 %button.cursor-pointer#add-member Invite New Member
+
+            %div.sidebar__btn.flex.items-center
+                = image_tag("dashboards.svg", alt: "Image", class: "sidebar__btn__icon cursor-pointer")
+                %label.cursor-pointer
+                    Change Background
+                    %input{type: "file", accept: "image/*", id: "input-background"}
     
         %div.sidebar__btn.sidebar__btn_delete.flex.items-center
             = image_tag("trash.svg", alt: "Delete", class: "sidebar__btn__icon cursor-pointer")

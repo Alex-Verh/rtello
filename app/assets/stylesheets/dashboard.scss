@@ -85,6 +85,10 @@
   &__btn {
     padding: 8px 10px;
 
+    input[type="file"] {
+      display: none;
+    }
+
     &_delete {
       color: variables.$color-4;
     }
@@ -103,6 +107,11 @@
 
 .dashboard {
   padding: 30px 20px;
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
 
   &__list {
     width: 250px;
@@ -138,6 +147,7 @@
 
     &__add {
       padding: 10px 15px;
+      width: 250px;
       border-radius: 5px;
       background-color: variables.$background-1;
       height: fit-content;

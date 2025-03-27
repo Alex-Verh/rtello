@@ -26,17 +26,27 @@ export const createDashboard = async (name: string) => {
 export const updateDashboard = async (
   id: string,
   name?: string,
-  backgroundImg?: string
+  backgroundImage?: File
 ) => {
   try {
-    const response = await axios.put(`/api/dashboards/${id}`, {
-      name: name,
-      dashboard: {
-        background_img: backgroundImg,
+    const formData = new FormData();
+    if (name) {
+      formData.append("name", name);
+    }
+    if (backgroundImage) {
+      formData.append("dashboard[background_image]", backgroundImage);
+    }
+
+    const response = await axios.patch(`/api/dashboards/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
     });
-    useToast("Dashboard name updated successfully!", "success");
-    return response.data;
+
+    if (backgroundImage) {
+      window.location.href = `/dashboard/${response.data.id}`;
+    }
+    useToast("Dashboard updated successfully!", "success");
   } catch (error) {
     console.error("Error updating dashboard:", error);
     if (axios.isAxiosError(error) && error.response?.data?.errors) {

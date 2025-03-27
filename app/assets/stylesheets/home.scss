@@ -82,6 +82,8 @@
       transition: variables.$transition;
       aspect-ratio: 16/7;
       padding: 8px 10px;
+      background-size: 100% auto;
+      background-repeat: repeat;
 
       &:hover {
         box-shadow: variables.$box-shadow;

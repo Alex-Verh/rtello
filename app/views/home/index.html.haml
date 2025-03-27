@@ -15,7 +15,7 @@
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @recent_dashboards.any?
         - @recent_dashboards.each_with_index do |dashboard, index|
-          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "#{ 'background-image: url(' + dashboard.background_image.url + ')' if dashboard.background_image? } #{ 'background-color: ' + colors[index % colors.length] unless dashboard.background_image? }"
       - else
         %span.text-gray-500 No recently visited.
 
@@ -26,7 +26,7 @@
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @own_dashboards.any?
         - @own_dashboards.each_with_index do |dashboard, index|
-          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "#{ 'background-image: url(' + dashboard.background_image.url + ')' if dashboard.background_image? } #{ 'background-color: ' + colors[index % colors.length] unless dashboard.background_image? }"
       - else
         %span.text-gray-500 No dashboards.
 
@@ -37,6 +37,6 @@
     %div.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-4
       - if @other_dashboards.any?
         - @other_dashboards.each_with_index do |dashboard, index|
-          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "background-color: #{colors[index % colors.length]};"
+          = link_to dashboard.container.name, dashboard_path(dashboard.id), class: "home-main__dashboard flex items-center justify-center cursor-pointer", style: "#{ 'background-image: url(' + dashboard.background_image.url + ')' if dashboard.background_image? } #{ 'background-color: ' + colors[index % colors.length] unless dashboard.background_image? }"
       - else
         %span.text-gray-500 No other dashboards you are member of.

@@ -20,6 +20,7 @@ import { listHTML, taskHTML, memberHTML } from "../dom";
 import { ListResponse, TaskResponse, MemberResponse } from "../interfaces";
 import axios from "axios";
 import { Controller } from "@hotwired/stimulus";
+import { NULL } from "sass";
 
 export default class DashboardController extends Controller {
   connect() {
@@ -89,6 +90,17 @@ export default class DashboardController extends Controller {
           containerName.textContent = newName;
         }
       );
+    });
+
+    // dashboards/templates change dashboard
+    const backgroundInput = document.querySelector(
+      "#input-background"
+    ) as HTMLInputElement;
+
+    backgroundInput?.addEventListener("change", async () => {
+      const file = backgroundInput?.files?.[0];
+      if (!file || !dashboardId) return;
+      updateDashboard(dashboardId, "", file);
     });
 
     // create dashboard from this template

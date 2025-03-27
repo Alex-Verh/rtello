@@ -88,6 +88,16 @@ group :development do
   gem "letter_opener_web"
 end
 
+# For background images uploads
+gem "carrierwave"
+
+# For image resizing
+gem "mini_magick"
+
+# For background jobs
+gem "sidekiq"
+# Sidekiq dependency
+gem "redis"
 
 
 # ----------------------------------------------------

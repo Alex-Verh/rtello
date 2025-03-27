@@ -5,7 +5,7 @@ const sassPlugin = require("esbuild-sass-plugin");
   const ctx = await context({
     entryPoints: [
       "app/javascript/application.ts",
-      ...glob.sync("app/javascript/controllers/**/*.ts"), // Match all .ts files recursively
+      "app/javascript/controllers/**/*.ts",
     ],
     bundle: true,
     outdir: "app/assets/builds",

@@ -1,4 +1,4 @@
-%section.dashboard.overflow-x-auto
+%section.dashboard.overflow-x-auto#dashboard{ style: container.container.container_type.to_sym == :dashboard && container.background_image? ? "background-image: url(#{@dashboard.background_image.url})" : "" }
     %div.flex.flex-nowrap#lists-container{  data:{ container_id: container.container.id }.merge(container.container.container_type.to_sym == :dashboard ? {dashboard_id: container.id} : {template_id: container.id})}
         - container.container.lists.sort_by(&:position).each do |list|
             %div.dashboard__list.flex-shrink-0.flex.flex-col.cursor-grab{ data: { list_id: list.id }, id: "list#{list.id}" }
@@ -19,11 +19,13 @@
                 %div.dashboard__list__add.flex.items-center{ data: { list_id: list.id } }
                     = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
                     %button.cursor-pointer Add new task
+            
 
         -# Add new list btn
         %div.dashboard__list__add.flex.items-center.flex-shrink-0.flex#create-list
             = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
             %button.cursor-pointer Add new list
+
 
 
       

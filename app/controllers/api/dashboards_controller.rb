@@ -11,6 +11,10 @@ class Api::DashboardsController < ApplicationController
         user_id: current_user.id
       )
       dashboard = container.create_dashboard!(dashboard_params)
+
+      # background processing for image resizing
+      ProcessDashboardBackgroundJob.perform_later(dashboard.id) if dashboard.background_image?
+
       dashboard.save!
       render json: dashboard, status: :created
     end
@@ -78,6 +82,9 @@ class Api::DashboardsController < ApplicationController
       container.update!(name: params[:name]) if params[:name].present?
       dashboard.update!(dashboard_params)
 
+      # background processing for image resizing
+      ProcessDashboardBackgroundJob.perform_later(dashboard.id) if dashboard.background_image?
+
       render json: dashboard
     end
   rescue ActiveRecord::RecordNotFound
@@ -137,7 +144,7 @@ class Api::DashboardsController < ApplicationController
   end
 
   def dashboard_params
-    params.fetch(:dashboard, {}).permit(:background_img)
+    params.fetch(:dashboard, {}).permit(:background_image)
   end
 
   def user_params

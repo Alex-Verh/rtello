@@ -1,0 +1,4 @@
+:concurrency: 5 # do up to 5 in parallel
+:queues:
+  - default
+  - carrierwave
