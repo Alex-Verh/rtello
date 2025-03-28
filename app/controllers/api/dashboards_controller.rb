@@ -36,22 +36,20 @@ class Api::DashboardsController < ApplicationController
       # create dashboard
       dashboard = container.create_dashboard!(dashboard_params)
 
-      template.increment!(:usage_count) # add the usage count
+    # copy all lists
+    templateContainer.lists.each do |template_list|
+      new_list = container.lists.create!(
+        name: template_list.name,
+        position: template_list.position,
+      )
 
-      # copy all lists
-      templateContainer.lists.each do |template_list|
-        new_list = container.lists.create!(
-          name: template_list.name,
-          position: template_list.position,
+      # copy all tasks for each list
+      template_list.tasks.each do |template_task|
+        new_task = new_list.tasks.create!(
+          description: template_task.description,
+          position: template_task.position
         )
-
-        # copy all tasks for each list
-        template_list.tasks.each do |template_task|
-          new_task = new_list.tasks.create!(
-            description: template_task.description,
-            position: template_task.position
-          )
-          new_task.create_dashboard_task! # besides regular task create dashboard task
+        new_task.create_dashboard_task! # besides regular task create dashboard task
       end
     end
 
