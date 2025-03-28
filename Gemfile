@@ -42,9 +42,6 @@ gem "thruster", require: false
 # Tailwind for styling/grid
 gem "tailwindcss-rails"
 
-# Alternative to webpack - jsbundling
-gem "jsbundling-rails"
-
 # Alternative to HTML
 gem "haml"
 
@@ -87,6 +84,7 @@ gem "mini_magick"
 
 # For background jobs
 gem "sidekiq"
+
 # Sidekiq dependency
 gem "redis"
 

@@ -17,8 +17,8 @@ export const listHTML = (
 
   wrapper.innerHTML = `
         <div class="dashboard__list__header flex items-center justify-between">
-            <div class="dashboard__list__title">${name}</div>
-            <button class="dashboard__list__delete"  data-list-id="${id}">
+            <div class="dashboard__list__title" data-list-id="${id}">${name}</div>
+            <button class="dashboard__list__delete" data-list-id="${id}">
                 <img src="${getAssetUrl(
                   "trash.svg"
                 )}" alt="Delete" class="cursor-pointer dashboard__list__icon">
@@ -55,7 +55,7 @@ export const taskHTML = (
           ? `<button class="dashboard__task__complete cursor-pointer" data-task-id="${id}"></button>`
           : ""
       }
-      <span>${description}</span>
+      <span class="dashboard__task__description" data-task-id="${id}">${description}</span>
       <button class="dashboard__task__delete" data-task-id="${id}">
         <img src="${getAssetUrl(
           "cross.svg"

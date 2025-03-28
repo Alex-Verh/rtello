@@ -83,13 +83,13 @@ class Api::TasksController < ApplicationController
     container = Container.find_by(id: list.container_id)
     return render json: { error: "Container not found" }, status: :not_found if container.nil?
 
-    case container.container_type # switch case when template check only if leader when dashboard if leader or member
+    case container.container_type.to_sym # switch case when template check only if leader when dashboard if leader or member
     when :template
-      unless container.container.user_id == current_user.id
+      unless container.user_id.to_s == current_user.id.to_s
         render json: { error: "Unauthorized: Only the leader can manage this template" }, status: :forbidden
       end
     when :dashboard
-      unless container.container.user_id == current_user.id || container.members.exists?(user_id: current_user.id)
+      unless container.user_id.to_s == current_user.id.to_s || container.members.exists?(user_id: current_user.id)
         render json: { error: "Unauthorized: You must be the leader or a member of this dashboard" }, status: :forbidden
       end
     end

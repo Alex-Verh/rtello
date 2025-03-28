@@ -20,7 +20,6 @@ import { listHTML, taskHTML, memberHTML } from "../dom";
 import { ListResponse, TaskResponse, MemberResponse } from "../interfaces";
 import axios from "axios";
 import { Controller } from "@hotwired/stimulus";
-import { NULL } from "sass";
 
 export default class DashboardController extends Controller {
   connect() {
@@ -123,7 +122,7 @@ export default class DashboardController extends Controller {
   handleListCreate(containerId: string) {
     // lists create
     const listCreate = document.querySelector("#create-list") as HTMLElement;
-    listCreate.addEventListener("click", () => {
+    listCreate?.addEventListener("click", () => {
       openModal(
         "Create New List",
         "List Name",

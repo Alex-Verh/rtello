@@ -1,31 +1,32 @@
-%section.dashboard.overflow-x-auto#dashboard{ style: container.container.container_type.to_sym == :dashboard && container.background_image? ? "background-image: url(#{@dashboard.background_image.url})" : "" }
-    %div.flex.flex-nowrap#lists-container{  data:{ container_id: container.container.id }.merge(container.container.container_type.to_sym == :dashboard ? {dashboard_id: container.id} : {template_id: container.id})}
+- is_manage = container.container.container_type.to_sym == :dashboard || (container.container.container_type.to_sym == :template && container.container.user_id == current_user.id)
+
+%section.dashboard.overflow-x-auto#dashboard{ style: is_manage && container.background_image? ? "background-image: url(#{@dashboard.background_image.url})" : "" }
+    %div.flex.flex-nowrap#lists-container{ data: { container_id: container.container.id }.merge(is_manage ? {dashboard_id: container.id} : {template_id: container.id}) }
         - container.container.lists.sort_by(&:position).each do |list|
             %div.dashboard__list.flex-shrink-0.flex.flex-col.cursor-grab{ data: { list_id: list.id }, id: "list#{list.id}" }
                 %div.dashboard__list__header.flex.items-center.justify-between
                     %div.dashboard__list__title{ data: { list_id: list.id } }= list.name
-                    %button.dashboard__list__delete{ data: { list_id: list.id } }
-                        = image_tag("trash.svg", alt: "Delete", class: "cursor-pointer dashboard__list__icon")
+                    - if is_manage
+                        %button.dashboard__list__delete{ data: { list_id: list.id } }
+                            = image_tag("trash.svg", alt: "Delete", class: "cursor-pointer dashboard__list__icon")
 
                 %div.dashboard__list__tasks.overflow-y-scroll{ data: { list_id: list.id }, id: "list-tasks#{list.id}" }
                     - list.tasks.sort_by(&:position).each do |task|
-                        %div.dashboard__task.flex.items-center.cursor-grab{ data: { task_id: task.id }, class: "#{' dashboard__task_active' if task.dashboard_task.completed? if task.dashboard_task}", id: "task#{task.id}" }
-                            - if container.container.container_type.to_sym  == :dashboard
+                        %div.dashboard__task.flex.items-center.cursor-grab{ data: { task_id: task.id }, class: "#{' dashboard__task_active' if task.dashboard_task&.completed?}", id: "task#{task.id}" }
+                            - if is_manage
                                 %button.dashboard__task__complete.cursor-pointer{ data: { task_id: task.id } }
                             %span.dashboard__task__description{ data: { task_id: task.id } }= task.description
-                            %button.dashboard__task__delete{ data: { task_id: task.id } }
-                                = image_tag("cross.svg", alt: "Delete", class: "cursor-pointer dashboard__task__icon")
+                            - if is_manage
+                                %button.dashboard__task__delete{ data: { task_id: task.id } }
+                                    = image_tag("cross.svg", alt: "Delete", class: "cursor-pointer dashboard__task__icon")
+                -# add task for each list
+                - if is_manage
+                    %div.dashboard__list__add.flex.items-center{ data: { list_id: list.id } }
+                        = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
+                        %button.cursor-pointer Add new task
             
-                %div.dashboard__list__add.flex.items-center{ data: { list_id: list.id } }
-                    = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
-                    %button.cursor-pointer Add new task
-            
-
-        -# Add new list btn
-        %div.dashboard__list__add.flex.items-center.flex-shrink-0.flex#create-list
-            = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
-            %button.cursor-pointer Add new list
-
-
-
-      
+        -# add list
+        - if is_manage
+            %div.dashboard__list__add.flex.items-center.flex-shrink-0.flex#create-list
+                = image_tag("plus.svg", alt: "Add", class: "cursor-pointer dashboard__list__icon")
+                %button.cursor-pointer Add new list

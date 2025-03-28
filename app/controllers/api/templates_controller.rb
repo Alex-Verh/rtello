@@ -7,7 +7,6 @@ class Api::TemplatesController < ApplicationController
     query = params[:query]
     templates = Template.joins(:container)
     .where("containers.name ILIKE ?", "%#{query}%")
-    .where(containers: { user_id: current_user.id })
     .limit(10)
     render json: templates.as_json(include: :container)
   end

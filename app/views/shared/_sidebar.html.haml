@@ -39,8 +39,9 @@
     
         %div.sidebar__btn.sidebar__btn_delete.flex.items-center
             = image_tag("trash.svg", alt: "Delete", class: "sidebar__btn__icon cursor-pointer")
-            %button.cursor-pointer#delete-container Delete Dashboard
-    - else 
+            %button.cursor-pointer#delete-container= container.container.container_type.to_sym == :template ? "Delete Template" : "Delete Dashboard"
+
+    - elsif container.container.container_type.to_sym == :dashboard
         %div.sidebar__btn.flex.items-center
             = image_tag("leave.svg", alt: "Leave", class: "sidebar__btn__icon cursor-pointer")
             %button.cursor-pointer.sidebar__member__delete{ data: { member_id: @member_id }} Leave Dashboard
