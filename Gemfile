@@ -54,15 +54,6 @@ gem "devise"
 # Convert erb files into haml
 gem "html2haml"
 
-# Rswag uses RSpec to define API tests later generated into OpenAPI
-group :development, :test do
-  gem "rspec-rails"
-end
-
-group :development, :test do
-  gem "rswag"
-end
-
 # Postgres adapter
 gem "pg"
 

@@ -47,17 +47,8 @@
     .navigation__dropdown {
       text-align: center;
       width: 150px;
-    }
-
-    &_avatar {
-      font-size: 12px;
-      background-color: variables.$color-1;
-      border-radius: 50%;
-      margin-inline-end: 10px;
-
-      width: 25px;
-      height: 25px;
-      aspect-ratio: 1;
+      left: auto;
+      right: 0;
     }
   }
 }
